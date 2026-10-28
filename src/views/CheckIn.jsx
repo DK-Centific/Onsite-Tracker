@@ -137,7 +137,7 @@ function Welcome() {
       <h1 className="large-title">Welcome</h1>
       <p className="lede">Tell us who you are once. This phone remembers you, so checking in takes one tap.</p>
       <form onSubmit={submit} noValidate>
-        <Group footer={err ? <span className="err" role="alert">{err}</span> : 'Use the email you were staffed with.'}>
+        <Group footer={err ? <span className="err" role="alert">{err}</span> : 'Use your work email for this project.'}>
           <label className="field-row">
             <span>Name</span>
             <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Full name" aria-invalid={!!err && !name.trim()} />
@@ -217,7 +217,7 @@ function NewPersonSheet({ open, onOpenChange, onDone, initialName }) {
       open={open}
       onOpenChange={onOpenChange}
       title="New here"
-      description="Add your name and the email you were staffed with."
+      description="Add your name and your work email for this project."
       footer={<button type="button" className="btn btn-primary btn-block" onClick={submit}>Continue</button>}
     >
       <form onSubmit={submit} noValidate>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { Toaster, toast } from 'sonner';
-import { ChartColumn, Clock, List, Monitor, Moon, RefreshCw, Settings, Smartphone, Sun, Tablet, Users } from 'lucide-react';
+import { ChartColumn, Clock, ExternalLink, List, Monitor, Moon, RefreshCw, Settings, Smartphone, Sun, Tablet, Users } from 'lucide-react';
 import { useStore } from './lib/store.js';
 import { CFG, DEMO } from './lib/config.js';
 import { go, useMedia, useRoute } from './lib/hooks.js';
@@ -18,12 +18,15 @@ const Logo = ({ size = 28 }) => (
   <span className="logo" role="img" aria-label="Centific" style={{ '--logo-src': `url(${centificMark})`, width: size, height: size }} />
 );
 
-const NAV = [
-  { id: 'checkin', label: 'Check in', icon: Clock, view: CheckIn },
-  { id: 'today', label: 'Today', icon: Users, view: Today, team: true },
-  { id: 'hours', label: 'Hours', icon: ChartColumn, view: Hours, team: true },
-  { id: 'records', label: 'Records', icon: List, view: Records, team: true },
+// Two separate experiences: the check-in page everyone uses (#/), and the admin
+// views for leads (#/admin/...). Nothing on the check-in page links to admin.
+const ADMIN_NAV = [
+  { id: 'admin/today', label: 'Today', icon: Users, view: Today },
+  { id: 'admin/hours', label: 'Hours', icon: ChartColumn, view: Hours },
+  { id: 'admin/records', label: 'Records', icon: List, view: Records },
 ];
+const CHECKIN = { id: 'checkin', label: 'Check in', icon: Clock, view: CheckIn };
+const LEGACY = { today: 'admin/today', hours: 'admin/hours', records: 'admin/records', admin: 'admin/today' };
 
 export default function App() {
   const route = useRoute();
@@ -49,7 +52,13 @@ export default function App() {
     return () => { clearInterval(id); document.removeEventListener('visibilitychange', onVis); };
   }, [sync]);
 
-  const item = NAV.find((n) => n.id === route) || NAV[0];
+  // Older links (#/today, #/hours, #/records) and a bare #/admin land on the admin views.
+  useEffect(() => {
+    const to = LEGACY[route];
+    if (to) location.replace(`${location.pathname}${location.search}#/${to}${location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?')) : ''}`);
+  }, [route]);
+  const isAdmin = route.startsWith('admin') || route in LEGACY;
+  const item = isAdmin ? ADMIN_NAV.find((n) => n.id === (LEGACY[route] || route)) || ADMIN_NAV[0] : CHECKIN;
 
   // The page's large title folds into the phone top bar once it scrolls under it.
   const [collapsed, setCollapsed] = useState(false);
@@ -74,31 +83,64 @@ export default function App() {
       : error ? 'Refresh failed'
         : loadedAt ? `Updated ${fmtTime(loadedAt)}` : '';
 
+  const main = (
+    <main className="main" key={item.id}>
+      {data ? <View /> : <div className="view"><div className="skeleton" /><div className="skeleton tall" /></div>}
+    </main>
+  );
+  const actions = (compact) => (
+    <>
+      <SyncButton syncing={syncing} onClick={manualSync} status={status} error={error} compact={compact} />
+      <button type="button" className="icon-btn" aria-label="Settings" onClick={() => setSettings(true)}><Settings size={18} /></button>
+    </>
+  );
+  const toaster = (
+    <>
+      <SettingsSheet open={settings} onOpenChange={setSettings} admin={isAdmin} />
+      {/* On phones the check-in actions sit at the bottom, so toasts come in from the top. */}
+      <Toaster position={phone ? 'top-center' : 'bottom-center'} duration={6000} theme={resolved} offset={24} mobileOffset={{ top: 64 }} toastOptions={{ className: 'toast' }} />
+    </>
+  );
+
+  if (!isAdmin) {
+    return (
+      <div className="app app-checkin">
+        <header className="topbar topbar-checkin">
+          <div className="top-left">
+            <Logo size={26} />
+            <span className="top-brand">On-site Check-in</span>
+            {DEMO && <Tag tone="warn">Demo</Tag>}
+          </div>
+          <div className="top-actions">{actions(true)}</div>
+        </header>
+        {main}
+        {toaster}
+      </div>
+    );
+  }
+
   return (
-    <div className="app">
+    <div className="app app-admin">
       <aside className="sidebar">
         <div className="side-brand">
           <Logo size={30} />
           <div className="side-titles">
-            <span className="side-name">On-site</span>
+            <span className="side-name">On-site Admin</span>
             <span className="side-project">{CFG.project}</span>
           </div>
         </div>
-        <nav className="side-nav" aria-label="Main">
-          {NAV.map((n, i) => (
-            <div key={n.id}>
-              {i === 1 && <div className="side-section">Team</div>}
-              <a href={`#/${n.id}`} className={clsx('side-link', n.id === item.id && 'is-active')} aria-current={n.id === item.id ? 'page' : undefined}>
-                <n.icon size={18} aria-hidden="true" />
-                {n.label}
-              </a>
-            </div>
+        <nav className="side-nav" aria-label="Admin">
+          {ADMIN_NAV.map((n) => (
+            <a key={n.id} href={`#/${n.id}`} className={clsx('side-link', n.id === item.id && 'is-active')} aria-current={n.id === item.id ? 'page' : undefined}>
+              <n.icon size={18} aria-hidden="true" />
+              {n.label}
+            </a>
           ))}
         </nav>
-        <div className="side-foot">
-          <SyncButton syncing={syncing} onClick={manualSync} status={status} error={error} />
-          <button type="button" className="icon-btn" aria-label="Settings" onClick={() => setSettings(true)}><Settings size={18} /></button>
-        </div>
+        <a className="side-out" href="#/" target="_blank" rel="noopener">
+          <ExternalLink size={15} aria-hidden="true" /> Open the check-in page
+        </a>
+        <div className="side-foot">{actions(false)}</div>
       </aside>
 
       <header className="topbar" data-collapsed={collapsed || undefined}>
@@ -107,28 +149,20 @@ export default function App() {
           {DEMO && <Tag tone="warn">Demo</Tag>}
           <span className="top-name">{item.label}</span>
         </div>
-        <div className="top-actions">
-          <SyncButton syncing={syncing} onClick={manualSync} status={status} error={error} compact />
-          <button type="button" className="icon-btn" aria-label="Settings" onClick={() => setSettings(true)}><Settings size={18} /></button>
-        </div>
+        <div className="top-actions">{actions(true)}</div>
       </header>
 
-      <main className="main" key={item.id}>
-        {data ? <View /> : <div className="view"><div className="skeleton" /><div className="skeleton tall" /></div>}
-      </main>
+      {main}
 
-      <nav className="tabbar" aria-label="Main">
-        {NAV.map((n) => (
+      <nav className="tabbar" aria-label="Admin">
+        {ADMIN_NAV.map((n) => (
           <a key={n.id} href={`#/${n.id}`} className={clsx('tab', n.id === item.id && 'is-active')} aria-current={n.id === item.id ? 'page' : undefined}>
             <n.icon size={22} aria-hidden="true" />
             <span>{n.label}</span>
           </a>
         ))}
       </nav>
-
-      <SettingsSheet open={settings} onOpenChange={setSettings} />
-      {/* On phones the check-in actions sit at the bottom, so toasts come in from the top. */}
-      <Toaster position={phone ? 'top-center' : 'bottom-center'} duration={6000} theme={resolved} offset={24} mobileOffset={{ top: 64 }} toastOptions={{ className: 'toast' }} />
+      {toaster}
     </div>
   );
 }
@@ -153,7 +187,7 @@ function SyncButton({ syncing, onClick, status, error, compact }) {
   );
 }
 
-function SettingsSheet({ open, onOpenChange }) {
+function SettingsSheet({ open, onOpenChange, admin }) {
   const { theme, setTheme, device, setDevice, me, forgetMe, resetDemo } = useStore();
   return (
     <Sheet open={open} onOpenChange={onOpenChange} title="Settings">
@@ -171,22 +205,24 @@ function SettingsSheet({ open, onOpenChange }) {
           />
         </div>
       </Group>
-      <Group title="This device" footer={device === 'shared' ? 'Everyone picks their name each time. Nothing about a person is remembered here.' : 'Remembers one person, so checking in is one tap.'}>
-        <div className="pad">
-          <Segmented
-            label="This device"
-            value={device || 'personal'}
-            onChange={(v) => { setDevice(v); if (v === 'shared') forgetMe(); }}
-            options={[
-              { value: 'personal', label: 'My phone', icon: <Smartphone size={15} /> },
-              { value: 'shared', label: 'Shared tablet', icon: <Tablet size={15} /> },
-            ]}
-          />
-        </div>
-        {device !== 'shared' && me && (
-          <Row title={me.name} subtitle={me.email} trailing={<button type="button" className="link" onClick={forgetMe}>Forget</button>} />
-        )}
-      </Group>
+      {!admin && (
+        <Group title="This device" footer={device === 'shared' ? 'Everyone picks their name each time. Nothing about a person is remembered here.' : 'Remembers one person, so checking in is one tap.'}>
+          <div className="pad">
+            <Segmented
+              label="This device"
+              value={device || 'personal'}
+              onChange={(v) => { setDevice(v); if (v === 'shared') forgetMe(); }}
+              options={[
+                { value: 'personal', label: 'My phone', icon: <Smartphone size={15} /> },
+                { value: 'shared', label: 'Shared tablet', icon: <Tablet size={15} /> },
+              ]}
+            />
+          </div>
+          {device !== 'shared' && me && (
+            <Row title={me.name} subtitle={me.email} trailing={<button type="button" className="link" onClick={forgetMe}>Forget</button>} />
+          )}
+        </Group>
+      )}
       <Group title="Data" footer={DEMO ? 'Sample data saved only in this browser. Add the Power Automate flow URLs to config.js to go live.' : 'Reads and writes the Excel workbook on SharePoint through Power Automate.'}>
         <Row title="Source" trailing={DEMO ? 'Demo' : 'Live · Excel'} />
         {DEMO && <Row title="Reset sample data" onClick={() => { resetDemo(); toast('Sample data reset'); }} className="row-action" />}

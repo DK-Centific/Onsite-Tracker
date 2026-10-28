@@ -622,3 +622,20 @@ p.err { text-align: center; margin: 0 0 12px; }
   .is-shared .checkin-aside .row-sub { font-size: 0.875rem; }
   .is-shared .checkin-aside .avatars .avatar { width: 32px; height: 32px; font-size: 0.75rem; }
 }
+
+/* ---------- Check-in page shell (no team navigation) ---------- */
+.app-checkin { display: block; }
+.app-checkin .topbar { display: flex; }
+.top-brand { font-weight: 600; font-size: 1rem; letter-spacing: -0.015em; white-space: nowrap; }
+.app-checkin .main { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
+@media (min-width: 768px) {
+  .app-checkin .topbar { height: 64px; padding: 0 24px; }
+  .app-checkin .main { padding: 40px 48px 64px; }
+}
+@media (max-width: 767px) {
+  .app-checkin .checkin-primary > .view { min-height: calc(100dvh - 92px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+  .app-checkin .top-brand { font-size: 0.9375rem; }
+}
+.app-admin .tabbar { grid-template-columns: repeat(3, 1fr); }
+.side-out { display: flex; align-items: center; gap: 8px; margin: 16px 12px 0; padding: 8px 0; font-size: 0.875rem; color: var(--ink-2); }
+@media (hover: hover) and (pointer: fine) { .side-out:hover { color: var(--blue-text); } }

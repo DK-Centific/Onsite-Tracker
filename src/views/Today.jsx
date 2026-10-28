@@ -73,7 +73,7 @@ export function Today() {
       <div className="split">
         <Group
           title="Needs attention"
-          action={recentIssues.length > 0 && <button type="button" className="link" onClick={() => go('records?flags')}>See all</button>}
+          action={recentIssues.length > 0 && <button type="button" className="link" onClick={() => go('admin/records?flags')}>See all</button>}
         >
           {recentIssues.length ? recentIssues.slice(0, 6).map((i, n) => (
             <Row
