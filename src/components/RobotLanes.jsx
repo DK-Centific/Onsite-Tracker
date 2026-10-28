@@ -1,0 +1,102 @@
+import { useState } from 'react';
+import { union } from '../lib/hours.js';
+import { fmtHrs, fmtTime, initials } from '../lib/time.js';
+import { Tag } from './ui.jsx';
+import { TriangleAlert } from 'lucide-react';
+
+const H = 36e5;
+
+// One lane per robot across the day. Each person's time is a thin line labelled with
+// their initials; the solid bar under them is the merged span, which is what counts as
+// delivered time. A pair working together reads as one bar.
+export function RobotLanes({ day, sessions, stations, now, pairSize = 2 }) {
+  const [tip, setTip] = useState(null);
+  const base = new Date(day);
+  base.setHours(0, 0, 0, 0);
+  const isToday = now.toDateString() === base.toDateString();
+
+  // 7 AM to 7 PM unless the day's sessions run outside it.
+  let from = 7, to = 19;
+  for (const s of sessions) {
+    from = Math.min(from, Math.floor((s.start - base) / H));
+    to = Math.max(to, Math.ceil((s.end - base) / H));
+  }
+  const span = to - from;
+  const x = (t) => `${(((t - base) / H - from) / span) * 100}%`;
+  const w = (a, b) => `${(Math.max(0, b - a) / H / span) * 100}%`;
+  const ticks = [];
+  for (let h = from; h <= to; h += span > 14 ? 3 : 2) ticks.push(h);
+  const tickLabel = (h) => { const hh = ((h + 11) % 12) + 1; return `${hh} ${h < 12 || h === 24 ? 'AM' : 'PM'}`; };
+
+  const names = [...new Set([...stations, ...sessions.map((s) => s.station)])];
+
+  return (
+    <div className="lanes" onPointerLeave={() => setTip(null)}>
+      <div className="lane lane-axis" aria-hidden="true">
+        <div className="lane-label" />
+        <div className="lane-track">
+          {ticks.map((h) => (
+            <span key={h} className="tick" style={{ left: `${((h - from) / span) * 100}%` }}>{tickLabel(h)}</span>
+          ))}
+        </div>
+      </div>
+      {names.map((name) => {
+        const mine = sessions.filter((s) => s.station === name).sort((a, b) => a.start - b.start);
+        const merged = union(mine);
+        const hours = merged.reduce((a, [s, e]) => a + (e - s) / H, 0);
+        const liveNow = mine.filter((s) => s.live).length;
+        const short = isToday && liveNow > 0 && liveNow < pairSize;
+        return (
+          <div className="lane" key={name}>
+            <div className="lane-label">
+              <span className="lane-name">{name}</span>
+              <span className="lane-meta">
+                {mine.length === 0 ? 'Idle' : `${fmtHrs(hours)} h delivered`}
+              </span>
+              {short && <Tag tone="warn" icon={<TriangleAlert size={12} />}>{liveNow} of {pairSize} on site</Tag>}
+            </div>
+            <div className="lane-track" role="img" aria-label={`${name}: ${mine.map((s) => `${s.name} ${fmtTime(s.start)} to ${s.live ? 'now' : fmtTime(s.end)}`).join(', ') || 'no one'}. ${fmtHrs(hours)} hours delivered.`}>
+              {ticks.map((h) => <span key={h} className="gridline" style={{ left: `${((h - from) / span) * 100}%` }} />)}
+              <div className="lane-people">
+                {mine.map((s, i) => (
+                  <div
+                    key={`${s.email}-${i}`}
+                    className="person-span"
+                    data-live={s.live || undefined}
+                    data-early={s.early || undefined}
+                    data-short={(s.end - s.start) / H / span < 0.04 || undefined}
+                    style={{ left: x(s.start), width: w(s.start, s.end), animationDelay: `${i * 60}ms` }}
+                    onPointerEnter={(e) => {
+                      const r = e.currentTarget.closest('.lanes').getBoundingClientRect();
+                      const b = e.currentTarget.getBoundingClientRect();
+                      const mid = b.left - r.left + Math.min(b.width, r.right - b.left) / 2;
+                      setTip({ s, left: Math.max(96, Math.min(r.width - 96, mid)), top: b.top - r.top });
+                    }}
+                  >
+                    <span className="person-ini">{initials(s.name)}</span>
+                    <span className="person-line" />
+                  </div>
+                ))}
+              </div>
+              <div className="lane-union">
+                {merged.map(([s, e]) => (
+                  <span key={s} className="union-bar reveal-x" style={{ left: x(new Date(s)), width: w(s, e) }} />
+                ))}
+              </div>
+              {isToday && now >= new Date(base.getTime() + from * H) && now <= new Date(base.getTime() + to * H) && (
+                <span className="now-line" style={{ left: x(now) }} />
+              )}
+            </div>
+          </div>
+        );
+      })}
+      {tip && (
+        <div className="lane-tip" style={{ left: tip.left, top: tip.top }} role="tooltip">
+          <strong>{tip.s.name}</strong>
+          <span>{fmtTime(tip.s.start)} – {tip.s.live ? 'now' : fmtTime(tip.s.end)} · {fmtHrs(tip.s.hours)} h</span>
+          {tip.s.early && <span className="tip-early">Left early{tip.s.note ? `: ${tip.s.note}` : ''}</span>}
+        </div>
+      )}
+    </div>
+  );
+}

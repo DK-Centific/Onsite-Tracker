@@ -1,0 +1,873 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-28T16:35:10.515Z",
+  "title": "Design System: On-site",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Cool Grey Ground",
+        "canonical": "#f3f4f6",
+        "tonalRamp": [
+          "#444446",
+          "#6c6c6e",
+          "#9e9ea0",
+          "#cbcbcd",
+          "#f3f4f6",
+          "#f7f7f9",
+          "#fafbfb",
+          "#fefefe"
+        ],
+        "dark": "#131314"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#464648",
+          "#717172",
+          "#a5a5a6",
+          "#d4d4d5",
+          "#ffffff",
+          "#ffffff",
+          "#ffffff",
+          "#ffffff"
+        ],
+        "dark": "#1e1f20"
+      },
+      "surface-raised-tint": {
+        "role": "neutral",
+        "displayName": "Raised Tint",
+        "canonical": "#f6f7f8",
+        "tonalRamp": [
+          "#444446",
+          "#6d6e6f",
+          "#9fa0a1",
+          "#cdcecf",
+          "#f6f7f8",
+          "#f9f9fa",
+          "#fbfcfc",
+          "#fefefe"
+        ],
+        "dark": "#242527"
+      },
+      "fill": {
+        "role": "neutral",
+        "displayName": "Well Fill",
+        "canonical": "#e8eaed",
+        "tonalRamp": [
+          "#414244",
+          "#68686b",
+          "#97989b",
+          "#c1c3c6",
+          "#e8eaed",
+          "#eff0f2",
+          "#f6f7f8",
+          "#fcfcfd"
+        ],
+        "dark": "#333537"
+      },
+      "fill-hover": {
+        "role": "neutral",
+        "displayName": "Well Fill Hover",
+        "canonical": "#dfe1e5",
+        "tonalRamp": [
+          "#3f4042",
+          "#646568",
+          "#919296",
+          "#babcbf",
+          "#dfe1e5",
+          "#e9eaed",
+          "#f2f3f5",
+          "#fbfbfc"
+        ],
+        "dark": "#3c3e41"
+      },
+      "separator": {
+        "role": "neutral",
+        "displayName": "Hairline Separator",
+        "canonical": "rgb(60 64 67 / 0.13)",
+        "dark": "rgb(255 255 255 / 0.09)"
+      },
+      "edge": {
+        "role": "neutral",
+        "displayName": "Surface Edge",
+        "canonical": "rgb(60 64 67 / 0.14)",
+        "dark": "rgb(255 255 255 / 0.08)"
+      },
+      "edge-strong": {
+        "role": "neutral",
+        "displayName": "Strong Edge",
+        "canonical": "rgb(60 64 67 / 0.22)",
+        "dark": "rgb(255 255 255 / 0.14)"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1f1f1f",
+        "tonalRamp": [
+          "#151516",
+          "#171718",
+          "#1a1a1b",
+          "#1d1d1d",
+          "#1f1f1f",
+          "#626262",
+          "#a5a5a5",
+          "#e4e4e4"
+        ],
+        "dark": "#e8eaed"
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Secondary Ink",
+        "canonical": "#5f6368",
+        "tonalRamp": [
+          "#232426",
+          "#313236",
+          "#424448",
+          "#515459",
+          "#5f6368",
+          "#8f9295",
+          "#bfc1c3",
+          "#ececed"
+        ],
+        "dark": "#a9adb3"
+      },
+      "ink-tertiary": {
+        "role": "neutral",
+        "displayName": "Tertiary Ink",
+        "canonical": "#72777d",
+        "tonalRamp": [
+          "#27282b",
+          "#383a3e",
+          "#4e5155",
+          "#61656a",
+          "#72777d",
+          "#9ca0a4",
+          "#c7c9cb",
+          "#eeefef"
+        ],
+        "dark": "#8f9399",
+        "note": "About 4.1:1 on the light ground; small text on ground uses ink-secondary."
+      },
+      "action-blue": {
+        "role": "primary",
+        "displayName": "Action Blue",
+        "canonical": "#1a73e8",
+        "tonalRamp": [
+          "#142743",
+          "#153969",
+          "#174e97",
+          "#1962c2",
+          "#1a73e8",
+          "#5f9def",
+          "#a3c7f6",
+          "#e4eefc"
+        ],
+        "dark": "#8ab4f8",
+        "job": "act and select"
+      },
+      "action-blue-hover": {
+        "role": "primary",
+        "displayName": "Action Blue Pressed",
+        "canonical": "#1765cc",
+        "tonalRamp": [
+          "#13243c",
+          "#14335e",
+          "#154586",
+          "#1656ab",
+          "#1765cc",
+          "#5d93db",
+          "#a2c1eb",
+          "#e3edf9"
+        ],
+        "dark": "#a3c4fa"
+      },
+      "action-blue-text": {
+        "role": "primary",
+        "displayName": "Action Blue Text",
+        "canonical": "#1967d2",
+        "tonalRamp": [
+          "#14253e",
+          "#153460",
+          "#16478a",
+          "#1858b0",
+          "#1967d2",
+          "#5e95e0",
+          "#a3c2ed",
+          "#e3edfa"
+        ],
+        "dark": "#a8c7fa"
+      },
+      "action-blue-soft": {
+        "role": "primary",
+        "displayName": "Action Blue Tint",
+        "canonical": "#e8f0fe",
+        "tonalRamp": [
+          "#414347",
+          "#686b72",
+          "#979ca5",
+          "#c1c8d4",
+          "#e8f0fe",
+          "#eff5fe",
+          "#f6f9ff",
+          "#fcfdff"
+        ],
+        "dark": "rgb(138 180 248 / 0.16)"
+      },
+      "on-site-green": {
+        "role": "secondary",
+        "displayName": "On-Site Green",
+        "canonical": "#188038",
+        "tonalRamp": [
+          "#132a1c",
+          "#143e22",
+          "#16562a",
+          "#176c32",
+          "#188038",
+          "#5da674",
+          "#a3ccaf",
+          "#e3f0e7"
+        ],
+        "dark": "#81c995",
+        "job": "on site"
+      },
+      "on-site-green-dot": {
+        "role": "secondary",
+        "displayName": "On-Site Green Dot",
+        "canonical": "#1e8e3e",
+        "tonalRamp": [
+          "#152d1d",
+          "#174425",
+          "#195f2e",
+          "#1c7836",
+          "#1e8e3e",
+          "#62b078",
+          "#a5d2b2",
+          "#e4f1e8"
+        ],
+        "dark": "#81c995"
+      },
+      "on-site-green-soft": {
+        "role": "secondary",
+        "displayName": "On-Site Green Tint",
+        "canonical": "#e6f4ea",
+        "tonalRamp": [
+          "#414443",
+          "#676c6a",
+          "#959e99",
+          "#c0cbc3",
+          "#e6f4ea",
+          "#eef7f0",
+          "#f5fbf7",
+          "#fcfefc"
+        ],
+        "dark": "rgb(129 201 149 / 0.15)"
+      },
+      "attention-yellow": {
+        "role": "tertiary",
+        "displayName": "Attention Yellow",
+        "canonical": "#f9ab00",
+        "tonalRamp": [
+          "#453410",
+          "#6e4f0c",
+          "#a17108",
+          "#cf8f04",
+          "#f9ab00",
+          "#fbc44d",
+          "#fddd99",
+          "#fef5e0"
+        ],
+        "dark": "#fdd663",
+        "job": "attention"
+      },
+      "attention-yellow-text": {
+        "role": "tertiary",
+        "displayName": "Attention Yellow Text",
+        "canonical": "#a15800",
+        "tonalRamp": [
+          "#312110",
+          "#4b2e0c",
+          "#6b3d08",
+          "#874b04",
+          "#a15800",
+          "#bd8a4d",
+          "#d9bc99",
+          "#f4ebe0"
+        ],
+        "dark": "#fdd663"
+      },
+      "attention-yellow-soft": {
+        "role": "tertiary",
+        "displayName": "Attention Yellow Tint",
+        "canonical": "#fef7e0",
+        "tonalRamp": [
+          "#464441",
+          "#706e66",
+          "#a4a092",
+          "#d4cebb",
+          "#fef7e0",
+          "#fef9e9",
+          "#fffcf3",
+          "#fffefb"
+        ],
+        "dark": "rgb(253 214 99 / 0.13)"
+      },
+      "early-red": {
+        "role": "tertiary",
+        "displayName": "Left-Early Red",
+        "canonical": "#d93025",
+        "tonalRamp": [
+          "#3e1918",
+          "#621e1b",
+          "#8d251f",
+          "#b52b22",
+          "#d93025",
+          "#e46e66",
+          "#f0aca8",
+          "#fae6e5"
+        ],
+        "dark": "#f28b82",
+        "job": "left early"
+      },
+      "early-red-hover": {
+        "role": "tertiary",
+        "displayName": "Left-Early Red Text",
+        "canonical": "#c5221f",
+        "tonalRamp": [
+          "#391616",
+          "#5a1818",
+          "#811c1b",
+          "#a51f1d",
+          "#c5221f",
+          "#d66462",
+          "#e8a7a5",
+          "#f8e4e4"
+        ],
+        "dark": "#f6aea9"
+      },
+      "early-red-soft": {
+        "role": "tertiary",
+        "displayName": "Left-Early Red Tint",
+        "canonical": "#fce8e6",
+        "tonalRamp": [
+          "#454142",
+          "#706868",
+          "#a39796",
+          "#d2c1c0",
+          "#fce8e6",
+          "#fdefee",
+          "#fef6f5",
+          "#fffcfc"
+        ],
+        "dark": "rgb(242 139 130 / 0.15)"
+      },
+      "ground-dark": {
+        "role": "neutral",
+        "displayName": "Cool Grey Ground (dark)",
+        "canonical": "#131314",
+        "tonalRamp": [
+          "#121214",
+          "#121214",
+          "#131314",
+          "#131314",
+          "#131314",
+          "#5a5a5b",
+          "#a1a1a1",
+          "#e3e3e3"
+        ]
+      },
+      "surface-dark": {
+        "role": "neutral",
+        "displayName": "Surface White (dark)",
+        "canonical": "#1e1f20",
+        "tonalRamp": [
+          "#151517",
+          "#171719",
+          "#191a1b",
+          "#1c1d1e",
+          "#1e1f20",
+          "#626263",
+          "#a5a5a6",
+          "#e4e4e4"
+        ]
+      },
+      "surface-raised-tint-dark": {
+        "role": "neutral",
+        "displayName": "Raised Tint (dark)",
+        "canonical": "#242527",
+        "tonalRamp": [
+          "#161618",
+          "#191a1c",
+          "#1d1e20",
+          "#212224",
+          "#242527",
+          "#666668",
+          "#a7a8a9",
+          "#e5e5e5"
+        ]
+      },
+      "fill-dark": {
+        "role": "neutral",
+        "displayName": "Well Fill (dark)",
+        "canonical": "#333537",
+        "tonalRamp": [
+          "#191a1c",
+          "#1f2022",
+          "#26282a",
+          "#2d2f31",
+          "#333537",
+          "#707273",
+          "#adaeaf",
+          "#e7e7e7"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Ink (dark)",
+        "canonical": "#e8eaed",
+        "tonalRamp": [
+          "#414244",
+          "#68686b",
+          "#97989b",
+          "#c1c3c6",
+          "#e8eaed",
+          "#eff0f2",
+          "#f6f7f8",
+          "#fcfcfd"
+        ]
+      },
+      "ink-secondary-dark": {
+        "role": "neutral",
+        "displayName": "Secondary Ink (dark)",
+        "canonical": "#a9adb3",
+        "tonalRamp": [
+          "#333437",
+          "#4e5054",
+          "#707277",
+          "#8e9196",
+          "#a9adb3",
+          "#c3c6ca",
+          "#dddee1",
+          "#f5f5f6"
+        ]
+      },
+      "ink-tertiary-dark": {
+        "role": "neutral",
+        "displayName": "Tertiary Ink (dark)",
+        "canonical": "#8f9399",
+        "tonalRamp": [
+          "#2e2e31",
+          "#444649",
+          "#606266",
+          "#797c81",
+          "#8f9399",
+          "#b1b3b8",
+          "#d2d4d6",
+          "#f2f2f3"
+        ]
+      },
+      "action-blue-dark": {
+        "role": "primary",
+        "displayName": "Action Blue (dark)",
+        "canonical": "#8ab4f8",
+        "tonalRamp": [
+          "#2c3646",
+          "#42536f",
+          "#5c76a1",
+          "#7497cf",
+          "#8ab4f8",
+          "#adcbfa",
+          "#d0e1fc",
+          "#f1f6fe"
+        ]
+      },
+      "action-blue-text-dark": {
+        "role": "primary",
+        "displayName": "Action Blue Text (dark)",
+        "canonical": "#a8c7fa",
+        "tonalRamp": [
+          "#333a47",
+          "#4e5a70",
+          "#6f82a3",
+          "#8da6d1",
+          "#a8c7fa",
+          "#c2d8fc",
+          "#dce9fd",
+          "#f5f8fe"
+        ]
+      },
+      "on-site-green-dark": {
+        "role": "secondary",
+        "displayName": "On-Site Green (dark)",
+        "canonical": "#81c995",
+        "tonalRamp": [
+          "#2a3a30",
+          "#3e5b48",
+          "#578364",
+          "#6da87e",
+          "#81c995",
+          "#a7d9b5",
+          "#cde9d5",
+          "#f0f9f2"
+        ]
+      },
+      "attention-yellow-dark": {
+        "role": "tertiary",
+        "displayName": "Attention Yellow (dark)",
+        "canonical": "#fdd663",
+        "tonalRamp": [
+          "#463d25",
+          "#706034",
+          "#a48c45",
+          "#d3b355",
+          "#fdd663",
+          "#fee292",
+          "#feefc1",
+          "#fffaec"
+        ]
+      },
+      "early-red-dark": {
+        "role": "tertiary",
+        "displayName": "Left-Early Red (dark)",
+        "canonical": "#f28b82",
+        "tonalRamp": [
+          "#432d2c",
+          "#6c4240",
+          "#9d5d58",
+          "#ca756e",
+          "#f28b82",
+          "#f6aea8",
+          "#fad1cd",
+          "#fdf1f0"
+        ]
+      },
+      "on-action-blue-dark": {
+        "role": "primary",
+        "displayName": "On Action Blue (dark)",
+        "canonical": "#062e6f",
+        "tonalRamp": [
+          "#0f1828",
+          "#0d1d38",
+          "#0b234c",
+          "#08295f",
+          "#062e6f",
+          "#516d9a",
+          "#9babc5",
+          "#e1e6ee"
+        ]
+      },
+      "early-red-text-dark": {
+        "role": "tertiary",
+        "displayName": "Left-Early Red Text (dark)",
+        "canonical": "#f6aea9",
+        "tonalRamp": [
+          "#443435",
+          "#6d5050",
+          "#9f7370",
+          "#cd928e",
+          "#f6aea9",
+          "#f9c6c3",
+          "#fbdfdd",
+          "#fef5f5"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display numerals",
+        "purpose": "Shift-ring elapsed time (3.25rem) and checked-in/out time (3rem). Tabular."
+      },
+      "headline": {
+        "displayName": "Large title",
+        "purpose": "Opens every view; folds into the phone top bar on scroll. 2.75rem on the shared tablet."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Sheet titles and the sidebar app name."
+      },
+      "group-title": {
+        "displayName": "Group title",
+        "purpose": "Section names above grouped lists; button text size."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Rows and fields; row titles at 500."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "Row subtitles, lane meta, group footers (68ch), tooltips."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Tags, avatar initials, sidebar sections, week-grid heads. Sentence case."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "Tab labels, lane hour ticks, person initials on lanes."
+      }
+    },
+    "shadows": [
+      {
+        "name": "edge",
+        "value": "0 0 0 0.5px var(--edge)",
+        "purpose": "Outline on every surface, combined with its elevation."
+      },
+      {
+        "name": "shadow-sm",
+        "value": "0 1px 2px rgb(32 33 36 / 0.06), 0 2px 8px rgb(32 33 36 / 0.05)",
+        "dark": "0 1px 2px rgb(0 0 0 / 0.4), 0 2px 8px rgb(0 0 0 / 0.28)",
+        "purpose": "Grouped lists, plain buttons, active sidebar link, collapsed top bar."
+      },
+      {
+        "name": "shadow-md",
+        "value": "0 6px 20px rgb(32 33 36 / 0.09), 0 1px 3px rgb(32 33 36 / 0.06)",
+        "dark": "0 8px 28px rgb(0 0 0 / 0.45), 0 1px 3px rgb(0 0 0 / 0.3)",
+        "purpose": "Middle step for floating surfaces between card and sheet."
+      },
+      {
+        "name": "shadow-lg",
+        "value": "0 16px 44px rgb(32 33 36 / 0.16)",
+        "dark": "0 20px 60px rgb(0 0 0 / 0.6)",
+        "purpose": "Sheets, with edge-strong."
+      },
+      {
+        "name": "raise",
+        "value": "5px 5px 14px rgb(60 64 67 / 0.15), -5px -5px 14px rgb(255 255 255 / 0.95)",
+        "dark": "5px 5px 14px rgb(0 0 0 / 0.55), -4px -4px 12px rgb(255 255 255 / 0.04)",
+        "purpose": "Paired-shadow raise for robot tiles and the shift ring only."
+      },
+      {
+        "name": "well",
+        "value": "inset 2px 2px 5px rgb(60 64 67 / 0.15), inset -2px -2px 5px rgb(255 255 255 / 0.95)",
+        "dark": "inset 2px 2px 5px rgb(0 0 0 / 0.55), inset -1px -1px 3px rgb(255 255 255 / 0.04)",
+        "purpose": "Search, reason field, segmented track, compare tracks, selected robot tile."
+      },
+      {
+        "name": "glow-blue",
+        "value": "0 6px 16px rgb(26 115 232 / 0.3), inset 0 1px 0 rgb(255 255 255 / 0.22)",
+        "dark": "0 6px 18px rgb(138 180 248 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.3)",
+        "purpose": "Under primary buttons; removed when disabled."
+      },
+      {
+        "name": "glow-red",
+        "value": "0 6px 16px rgb(217 48 37 / 0.28), inset 0 1px 0 rgb(255 255 255 / 0.2)",
+        "dark": "0 6px 18px rgb(242 139 130 / 0.18), inset 0 1px 0 rgb(255 255 255 / 0.25)",
+        "purpose": "Under danger buttons; removed when disabled."
+      },
+      {
+        "name": "bar-material",
+        "value": "background: rgb(243 244 246 / 0.82); backdrop-filter: saturate(180%) blur(20px)",
+        "dark": "background: rgb(19 19 20 / 0.8)",
+        "purpose": "Translucent phone top bar and tab bar."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Default for hover, press, entrances. Behaviour per ux-behavior-spec.md."
+      },
+      {
+        "name": "ease-slide",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Segmented pill slide (350ms)."
+      },
+      {
+        "name": "ease-exit",
+        "value": "cubic-bezier(0.4, 0, 1, 1)",
+        "purpose": "Sheet dismissal (200-220ms)."
+      },
+      {
+        "name": "ease-loop",
+        "value": "cubic-bezier(0.45, 0, 0.55, 1)",
+        "purpose": "Breathing live dot, sync dots, skeletons."
+      },
+      {
+        "name": "spring",
+        "value": "linear(0, 0.07, 0.228, 0.417, 0.6, 0.757, 0.878, 0.964, 1.018, 1.048, 1.059, 1.058, 1.05, 1.039, 1.028, 1.018, 1.01, 1.004, 1, 0.998, 0.997, 0.997, 0.997, 0.997, 1)",
+        "purpose": "Sheet rise (520-560ms), check pop, done mark."
+      },
+      {
+        "name": "source",
+        "value": "ux-behavior-spec.md",
+        "purpose": "Authoritative durations, easings, hover/press and reduced-motion law; not duplicated here."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "lanes-stack / week-collapse (max)",
+        "value": "640px"
+      },
+      {
+        "name": "sheet-centred / shared-tablet",
+        "value": "640px"
+      },
+      {
+        "name": "sidebar",
+        "value": "768px"
+      },
+      {
+        "name": "split-groups",
+        "value": "900px"
+      },
+      {
+        "name": "checkin-desktop",
+        "value": "1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action: Check in, Check out, Continue.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Check in</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; padding: 0 20px; border: 0; border-radius: 14px; font: 600 1.0625rem/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; letter-spacing: -0.01em; cursor: pointer; transition: scale 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-btn:active { scale: 0.97; } .ds-btn:focus-visible { outline: 2px solid var(--blue, #1a73e8); outline-offset: 2px; } .ds-btn-primary { background: var(--blue, #1a73e8); color: var(--on-blue, #fff); box-shadow: var(--glow-blue, 0 6px 16px rgb(26 115 232 / 0.3), inset 0 1px 0 rgb(255 255 255 / 0.22)); } .ds-btn-primary:hover { background: var(--blue-hover, #1765cc); }"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Checking out before the shift ends.",
+      "html": "<button class=\"ds-btn-danger\">Check out early</button>",
+      "css": ".ds-btn-danger { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 20px; border: 0; border-radius: 14px; font: 600 1.0625rem/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; background: var(--red, #d93025); color: #fff; box-shadow: var(--glow-red, 0 6px 16px rgb(217 48 37 / 0.28), inset 0 1px 0 rgb(255 255 255 / 0.2)); cursor: pointer; transition: scale 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-btn-danger:hover { background: var(--red-hover, #c5221f); } .ds-btn-danger:active { scale: 0.97; } .ds-btn-danger:focus-visible { outline: 2px solid var(--blue, #1a73e8); outline-offset: 2px; }"
+    },
+    {
+      "name": "Plain Button",
+      "kind": "button",
+      "refersTo": "button-plain",
+      "description": "Secondary actions; small pill variant for steppers.",
+      "html": "<button class=\"ds-btn-plain\">This week</button>",
+      "css": ".ds-btn-plain { display: inline-flex; align-items: center; min-height: 34px; padding: 0 12px; border: 0; border-radius: 999px; font: 600 0.875rem/1 -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; background: var(--surface, #fff); color: var(--ink, #1f1f1f); box-shadow: 0 0 0 0.5px var(--edge, rgb(60 64 67 / 0.14)), var(--shadow-sm, 0 1px 2px rgb(32 33 36 / 0.06), 0 2px 8px rgb(32 33 36 / 0.05)); cursor: pointer; transition: scale 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-btn-plain:hover { background: var(--fill-hover, #dfe1e5); } .ds-btn-plain:active { scale: 0.97; } .ds-btn-plain:focus-visible { outline: 2px solid var(--blue, #1a73e8); outline-offset: 2px; }"
+    },
+    {
+      "name": "Grouped List",
+      "kind": "card",
+      "refersTo": "grouped-list",
+      "description": "Inset grouped list on the grey ground with hairline rows.",
+      "html": "<section class=\"ds-group\"><h2 class=\"ds-group-title\">On site</h2><div class=\"ds-group-body\"><div class=\"ds-row\"><span class=\"ds-avatar\">SO</span><span class=\"ds-row-main\"><span class=\"ds-row-title\">Sam Okafor</span><span class=\"ds-row-sub\">Robot 2 · since 7:57 AM</span></span><span class=\"ds-row-trail\">1.6 h</span></div><div class=\"ds-row\"><span class=\"ds-avatar\">MD</span><span class=\"ds-row-main\"><span class=\"ds-row-title\">Morgan Diaz</span><span class=\"ds-row-sub\">Robot 3 · since 7:58 AM</span></span><span class=\"ds-row-trail\">1.5 h</span></div></div></section>",
+      "css": ".ds-group { background: var(--bg, #f3f4f6); padding: 16px; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; color: var(--ink, #1f1f1f); } .ds-group-title { margin: 0; padding: 0 16px 8px; font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.015em; } .ds-group-body { background: var(--surface, #fff); border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 0.5px var(--edge, rgb(60 64 67 / 0.14)), var(--shadow-sm, 0 1px 2px rgb(32 33 36 / 0.06), 0 2px 8px rgb(32 33 36 / 0.05)); } .ds-row { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 10px 16px; transition: background-color 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-row:hover { background: var(--surface-2, #f6f7f8); } .ds-row + .ds-row { box-shadow: inset 0 0.5px 0 var(--sep, rgb(60 64 67 / 0.13)); } .ds-avatar { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--green-soft, #e6f4ea); color: var(--green, #188038); font-size: 0.75rem; font-weight: 600; } .ds-row-main { flex: 1; display: flex; flex-direction: column; gap: 1px; } .ds-row-title { font-weight: 500; } .ds-row-sub { font-size: 0.8125rem; color: var(--ink-2, #5f6368); } .ds-row-trail { color: var(--ink, #1f1f1f); font-weight: 600; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Search Well",
+      "kind": "input",
+      "refersTo": "search-field",
+      "description": "Inset well field; focus adds a blue ring.",
+      "html": "<label class=\"ds-search\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input placeholder=\"Search names\" /></label>",
+      "css": ".ds-search { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 12px; background: var(--fill, #e8eaed); color: var(--ink-3, #72777d); box-shadow: var(--well, inset 2px 2px 5px rgb(60 64 67 / 0.15), inset -2px -2px 5px rgb(255 255 255 / 0.95)); font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; } .ds-search input { flex: 1; min-width: 0; border: 0; background: none; font: inherit; font-size: 1rem; color: var(--ink, #1f1f1f); outline: none; caret-color: var(--blue, #1a73e8); } .ds-search:focus-within { box-shadow: var(--well, inset 2px 2px 5px rgb(60 64 67 / 0.15), inset -2px -2px 5px rgb(255 255 255 / 0.95)), 0 0 0 2px var(--blue, #1a73e8); }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segmented",
+      "description": "Well track with a surface pill marking the selection.",
+      "html": "<div class=\"ds-seg\" role=\"group\"><button aria-pressed=\"true\">Check-ins</button><button aria-pressed=\"false\">Shifts</button></div>",
+      "css": ".ds-seg { display: inline-flex; padding: 3px; border-radius: 11px; background: var(--fill, #e8eaed); box-shadow: var(--well, inset 2px 2px 5px rgb(60 64 67 / 0.15), inset -2px -2px 5px rgb(255 255 255 / 0.95)); font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; } .ds-seg button { height: 32px; padding: 0 14px; border: 0; border-radius: 8px; background: none; font: 500 0.875rem/1 inherit; font-family: inherit; color: var(--ink-2, #5f6368); cursor: pointer; transition: color 200ms cubic-bezier(0.23, 1, 0.32, 1), background-color 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-seg button[aria-pressed=\"true\"] { background: var(--surface, #fff); color: var(--ink, #1f1f1f); box-shadow: 0 0 0 0.5px var(--edge, rgb(60 64 67 / 0.14)), 0 1px 3px rgb(0 0 0 / 0.14), 0 2px 6px rgb(0 0 0 / 0.06); } .ds-seg button:focus-visible { outline: 2px solid var(--blue, #1a73e8); outline-offset: 2px; }"
+    },
+    {
+      "name": "Status Tags",
+      "kind": "chip",
+      "refersTo": "tag-attention",
+      "description": "Three job tones only: on site, attention, left early.",
+      "html": "<span class=\"ds-tags\"><span class=\"ds-tag ds-tag-on\">On site</span><span class=\"ds-tag ds-tag-warn\">1 of 2 on site</span><span class=\"ds-tag ds-tag-bad\">Left early</span></span>",
+      "css": ".ds-tags { display: inline-flex; gap: 8px; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; } .ds-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; } .ds-tag-on { background: var(--green-soft, #e6f4ea); color: var(--green, #188038); } .ds-tag-warn { background: var(--yellow-soft, #fef7e0); color: var(--yellow-text, #a15800); } .ds-tag-bad { background: var(--red-soft, #fce8e6); color: var(--red-text, #c5221f); }"
+    },
+    {
+      "name": "Sidebar Navigation",
+      "kind": "nav",
+      "refersTo": "sidebar-link-active",
+      "description": "Desktop sidebar; active link is a surface chip with blue text.",
+      "html": "<nav class=\"ds-side\"><a class=\"ds-side-link\" href=\"#\">Check in</a><div class=\"ds-side-section\">Team</div><a class=\"ds-side-link is-active\" href=\"#\" aria-current=\"page\">Today</a><a class=\"ds-side-link\" href=\"#\">Hours</a><a class=\"ds-side-link\" href=\"#\">Records</a></nav>",
+      "css": ".ds-side { display: flex; flex-direction: column; gap: 2px; width: 248px; padding: 16px 12px; background: var(--surface-2, #f6f7f8); box-shadow: inset -0.5px 0 0 var(--edge-strong, rgb(60 64 67 / 0.22)); font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; } .ds-side-section { padding: 18px 12px 6px; font-size: 0.75rem; font-weight: 600; color: var(--ink-3, #72777d); } .ds-side-link { display: flex; align-items: center; height: 38px; padding: 0 12px; border-radius: 10px; font-size: 0.9375rem; font-weight: 500; color: var(--ink, #1f1f1f); text-decoration: none; transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-side-link:not(.is-active):hover { background: var(--fill, #e8eaed); } .ds-side-link.is-active { background: var(--surface, #fff); color: var(--blue-text, #1967d2); box-shadow: 0 0 0 0.5px var(--edge, rgb(60 64 67 / 0.14)), var(--shadow-sm, 0 1px 2px rgb(32 33 36 / 0.06), 0 2px 8px rgb(32 33 36 / 0.05)); } .ds-side-link:focus-visible { outline: 2px solid var(--blue, #1a73e8); outline-offset: 2px; }"
+    },
+    {
+      "name": "Robot Lane",
+      "kind": "custom",
+      "refersTo": "robot-lanes",
+      "description": "Signature: initialled person lines over the merged delivered bar, with a now-line.",
+      "html": "<div class=\"ds-lane\"><div class=\"ds-lane-label\"><strong>Robot 1</strong><span>1.5 h delivered</span></div><div class=\"ds-lane-track\"><div class=\"ds-span\" style=\"left:10%;width:18%\"><span class=\"ds-ini\">JP</span><span class=\"ds-line\"></span></div><div class=\"ds-span ds-live\" style=\"left:12%;width:16%\"><span class=\"ds-ini\">AL</span><span class=\"ds-line\"></span></div><div class=\"ds-union\"><span style=\"left:10%;width:18%\"></span></div><span class=\"ds-now\" style=\"left:28%\"></span></div></div>",
+      "css": ".ds-lane { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 16px; padding: 12px 16px; background: var(--surface, #fff); border-radius: 14px; box-shadow: 0 0 0 0.5px var(--edge, rgb(60 64 67 / 0.14)); font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; color: var(--ink, #1f1f1f); } .ds-lane-label { display: flex; flex-direction: column; gap: 4px; justify-content: center; } .ds-lane-label span { font-size: 0.8125rem; color: var(--ink-2, #5f6368); } .ds-lane-track { position: relative; display: flex; flex-direction: column; gap: 2px; padding-top: 2px; min-height: 64px; } .ds-span { position: relative; height: 22px; } .ds-ini { position: absolute; left: 0; top: -1px; font-size: 0.6875rem; font-weight: 600; line-height: 1; letter-spacing: 0.02em; color: var(--ink-2, #5f6368); } .ds-line { position: absolute; left: 0; right: 0; bottom: 3px; height: 3px; border-radius: 999px; background: var(--ink-3, #72777d); opacity: 0.55; } .ds-live .ds-line { background: var(--green-dot, #1e8e3e); opacity: 1; } .ds-union { position: relative; height: 10px; margin-top: 4px; } .ds-union span { position: absolute; top: 0; height: 10px; border-radius: 4px; background: var(--blue, #1a73e8); } .ds-now { position: absolute; top: -6px; bottom: -6px; width: 2px; margin-left: -1px; border-radius: 2px; background: var(--ink, #1f1f1f); opacity: 0.7; }"
+    },
+    {
+      "name": "Robot Tile",
+      "kind": "custom",
+      "refersTo": "robot-tile",
+      "description": "Raised tile; selection sinks into a blue-ringed well.",
+      "html": "<div class=\"ds-tiles\"><button class=\"ds-tile\">Robot 1<span>JP, AL</span></button><button class=\"ds-tile is-on\" aria-pressed=\"true\">Robot 3<span>MD</span></button></div>",
+      "css": ".ds-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; background: var(--bg, #f3f4f6); font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, sans-serif; } .ds-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-height: 84px; padding: 14px; border: 0; border-radius: 14px; text-align: left; font: 600 1rem/1.2 inherit; font-family: inherit; color: var(--ink, #1f1f1f); background: var(--surface, #fff); box-shadow: var(--raise, 5px 5px 14px rgb(60 64 67 / 0.15), -5px -5px 14px rgb(255 255 255 / 0.95)), 0 0 0 0.5px var(--edge, rgb(60 64 67 / 0.14)); cursor: pointer; transition: scale 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-tile span { font-size: 0.8125rem; font-weight: 400; color: var(--ink-2, #5f6368); } .ds-tile:hover:not(.is-on) { background: var(--surface-2, #f6f7f8); } .ds-tile:active { scale: 0.97; } .ds-tile:focus-visible { outline: 2px solid var(--blue, #1a73e8); outline-offset: 2px; } .ds-tile.is-on { background: var(--blue-soft, #e8f0fe); color: var(--blue-text, #1967d2); box-shadow: var(--well, inset 2px 2px 5px rgb(60 64 67 / 0.15), inset -2px -2px 5px rgb(255 255 255 / 0.95)), inset 0 0 0 2px var(--blue, #1a73e8); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Robot's Lane",
+    "overview": "On-site speaks Apple's system grammar (user-pinned): system type with large bold titles, inset grouped lists floating on a cool grey ground, hairline separators, sheets that rise from the bottom on phones and settle centred on larger screens, a sidebar on desktop and a translucent tab bar on phones. Nothing is decorated; every surface is either a list, a control, or the robot lanes. The unit of the world is the robot, so the one signature drawing in the system is a timeline of robots, not a dashboard of people.\n\nColor is borrowed lightly from Google's four (user-pinned) and assigned jobs, never used as branding: blue acts and selects, green means on site, yellow asks for attention, red means left early. Light and dark are separately tuned palettes, not an inversion: dark mode swaps to the lighter Google tints (#8ab4f8 family) with dark ink on blue fills.\n\nDepth is the Twilight/Atlas definition (user-pinned): a 0.5px edge on every surface, a soft paired-shadow raise on the few tactile objects (robot tiles, the shift ring), inset wells for inputs and tracks, and a three-step sm/md/lg elevation for cards, folded bars and sheets. Motion and interaction behaviour are governed by `ux-behavior-spec.md`; this file does not restate them.",
+    "keyCharacteristics": [
+      "System font stack only (SF Pro on Apple devices), bold large titles, tabular numerals for every time and hour figure.",
+      "Inset grouped lists on a grey ground; separators are 0.5px inset hairlines, never full borders.",
+      "Four job colors, each with a solid, a text-safe tone and a soft tint; separately tuned in dark mode.",
+      "0.5px edges everywhere, paired raise on tactile objects, wells on inputs and tracks.",
+      "Robot lanes: thin initialled person lines over a merged blue delivered bar."
+    ],
+    "rules": [
+      {
+        "name": "The Four Jobs Rule",
+        "body": "Blue, green, yellow and red each have exactly one job (act/select, on site, attention, left early). A color never appears for decoration or for a job that is not its own; a new status gets a neutral treatment before it gets a fifth hue.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three Tones Rule",
+        "body": "Every job color ships as a solid (fills, bars, dots), a text tone (words on surface or ground) and a soft tint (chip and icon backgrounds). Words always use the text tone.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tuned Dark Rule",
+        "body": "Dark mode is its own palette (ground-dark #131314 with lighter Google tints and dark ink on blue fills), defined for both `prefers-color-scheme: dark` and `[data-theme=\"dark\"]`. Never derive dark by inverting light.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Time Rule",
+        "body": "Every clock, duration and hour figure uses tabular numerals so columns and counters never jitter.",
+        "section": "typography"
+      },
+      {
+        "name": "The Native Face Rule",
+        "body": "Type is the system stack only. No webfonts, no display face; hierarchy comes from size and weight.",
+        "section": "typography"
+      },
+      {
+        "name": "The Hairline Rule",
+        "body": "Every surface is outlined at 0.5px, never 1px; separators are 0.5px inset shadows, not borders.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Pressed-In Selection Rule",
+        "body": "A raised tile shows selection by sinking into a well with a 2px blue inner ring, not by lifting higher.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Few Raised Rule",
+        "body": "The paired raise belongs to tactile objects you tap or watch (robot tiles, the ring). Lists and cards stay at sm.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do open every view with a large title (2.125rem, 700) and a one-line lede in secondary ink.",
+      "Do put content in inset grouped lists on the grey ground, rows at 52px minimum with 0.5px inset separators.",
+      "Do give every surface its 0.5px edge, and reserve the paired raise for tactile objects.",
+      "Do use the text tone of a job color for words and the soft tint behind it.",
+      "Do tune any new color separately for light and dark, in both the media-query and `[data-theme]` blocks.",
+      "Do show any per-robot timing as robot lanes: person lines over the merged delivered bar.",
+      "Do follow `ux-behavior-spec.md` for every hover, press, transition and reduced-motion behaviour."
+    ],
+    "donts": [
+      "Don't use a job color outside its job, or add decorative color.",
+      "Don't use 1px borders or full-bleed dividers; hairlines are 0.5px and inset.",
+      "Don't set yellow solid as text, or small text in tertiary ink on the grey ground (about 4.1:1); use secondary ink there.",
+      "Don't add webfonts, display faces or brand marks; the client's logos and wordmarks are never used.",
+      "Don't build the category default: a time-clock form beside stacked KPI cards. Status is a sentence and lanes, not tiles of numbers.",
+      "Don't stack bars for a pair or sum their hours as delivered; delivered and person hours are always labelled distinctly."
+    ]
+  }
+}
