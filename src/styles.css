@@ -17,6 +17,7 @@
   --blue-soft: #e8f0fe;
   --on-blue: #ffffff;
   --on-red: #ffffff;
+  --logo: #3c4043;
   --pill: #ffffff;
   --green: #188038;
   --green-dot: #1e8e3e;
@@ -72,6 +73,7 @@
     --blue-soft: rgb(138 180 248 / 0.16);
     --on-blue: #062e6f;
     --on-red: #601410;
+    --logo: #ffffff;
     --pill: #4a4c50;
     --green: #81c995;
     --green-dot: #81c995;
@@ -115,6 +117,7 @@
   --blue-soft: rgb(138 180 248 / 0.16);
   --on-blue: #062e6f;
   --on-red: #601410;
+  --logo: #ffffff;
   --pill: #4a4c50;
   --green: #81c995;
   --green-dot: #81c995;
@@ -207,7 +210,12 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
   }
   .main { padding: 40px 48px 64px; }
 }
-.side-brand { display: flex; flex-direction: column; padding: 0 12px 24px; }
+.side-brand { display: flex; align-items: center; gap: 10px; padding: 0 12px 24px; }
+.side-titles { display: flex; flex-direction: column; min-width: 0; }
+.logo {
+  flex: none; display: inline-block; background-color: var(--logo);
+  -webkit-mask: var(--logo-src) center / contain no-repeat; mask: var(--logo-src) center / contain no-repeat;
+}
 .side-name { font-family: var(--font-display); font-size: 1.375rem; font-weight: 700; letter-spacing: -0.02em; }
 .side-project { font-size: 0.8125rem; color: var(--ink-2); }
 .side-nav { display: flex; flex-direction: column; gap: 2px; }

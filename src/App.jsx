@@ -11,6 +11,12 @@ import { CheckIn } from './views/CheckIn.jsx';
 import { Today } from './views/Today.jsx';
 import { Hours } from './views/Hours.jsx';
 import { Records } from './views/Records.jsx';
+import centificMark from './assets/centific-mark.png';
+
+// Centific mark, drawn as a mask so it takes the theme's logo color (dark grey / white).
+const Logo = ({ size = 28 }) => (
+  <span className="logo" role="img" aria-label="Centific" style={{ '--logo-src': `url(${centificMark})`, width: size, height: size }} />
+);
 
 const NAV = [
   { id: 'checkin', label: 'Check in', icon: Clock, view: CheckIn },
@@ -72,8 +78,11 @@ export default function App() {
     <div className="app">
       <aside className="sidebar">
         <div className="side-brand">
-          <span className="side-name">On-site</span>
-          <span className="side-project">{CFG.project}</span>
+          <Logo size={30} />
+          <div className="side-titles">
+            <span className="side-name">On-site</span>
+            <span className="side-project">{CFG.project}</span>
+          </div>
         </div>
         <nav className="side-nav" aria-label="Main">
           {NAV.map((n, i) => (
@@ -94,6 +103,7 @@ export default function App() {
 
       <header className="topbar" data-collapsed={collapsed || undefined}>
         <div className="top-left">
+          <Logo size={24} />
           {DEMO && <Tag tone="warn">Demo</Tag>}
           <span className="top-name">{item.label}</span>
         </div>
