@@ -16,12 +16,13 @@ export const ISSUE = {
   noin: { label: 'No check-in', tone: 'warn', icon: <TriangleAlert size={12} /> },
   late: { label: 'Not here yet', tone: 'warn', icon: <UserX size={12} /> },
   noshow: { label: 'No-show', tone: 'bad', icon: <UserX size={12} /> },
-  unscheduled: { label: 'Not on the schedule', tone: 'muted', icon: <CalendarX size={12} /> },
+  unscheduled: { label: 'Not on the schedule', tone: 'warn', icon: <CalendarX size={12} /> },
 };
 
 export function issueDetail(i) {
   if (i.kind === 'early') return `Out at ${fmtTime(i.at)} after ${fmtHrsU(i.hours)}${i.note ? ` · “${i.note}”` : ''}`;
   if (i.kind === 'noout') return `In at ${fmtTime(i.at)}, never checked out · hours not counted`;
+  if (i.kind === 'unscheduled') return `In at ${fmtTime(i.at)} with no shift booked that day`;
   return `Out at ${fmtTime(i.at)} with no check-in`;
 }
 

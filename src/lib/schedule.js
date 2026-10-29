@@ -51,7 +51,8 @@ export function dayPlan(schedule, sessions, issues, day, now = new Date()) {
     return { ...r, startAt: start, endAt: end, status, sessions: mine, elsewhere };
   }).sort((a, b) => a.station.localeCompare(b.station) || a.startAt - b.startAt || a.name.localeCompare(b.name));
   const planned = new Set(shifts.map((r) => r.email));
-  const unscheduled = [...new Map(daySessions.filter((s) => !planned.has(s.email)).map((s) => [s.email, s])).values()];
+  // Only a day with a schedule can have someone off it; an unplanned day would flag everyone.
+  const unscheduled = shifts.length ? [...new Map(daySessions.filter((s) => !planned.has(s.email)).map((s) => [s.email, s])).values()] : [];
   return { rows, unscheduled };
 }
 
@@ -83,4 +84,15 @@ export function backfillStart(row, now = new Date()) {
   if (row.startAt > now) return row.start;
   const m = Math.ceil((now.getHours() * 60 + now.getMinutes()) / 15) * 15;
   return `${String(Math.floor(m / 60) % 24).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+}
+
+// Check-ins (IN taps) by someone with no shift that day, on days that have a schedule.
+export function unscheduledIns(schedule, punches) {
+  const rows = schedule || [];
+  const days = new Set(rows.map((r) => r.date));
+  const booked = new Set(rows.map((r) => `${r.date}|${r.email}`));
+  return punches.filter((p) => {
+    const k = dayKey(new Date(p.ts));
+    return p.type === 'in' && days.has(k) && !booked.has(`${k}|${p.email}`);
+  });
 }

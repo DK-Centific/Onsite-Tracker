@@ -5,7 +5,7 @@ import { buildSessions } from '../lib/hours.js';
 import { dayKey, fmtLongDay, fmtTime, pad, parseDay, fmtHrsU } from '../lib/time.js';
 import { Group, Row, Segmented, Tag } from '../components/ui.jsx';
 import { ISSUE, issueDetail } from './Today.jsx';
-import { STATUS, dayPlan } from '../lib/schedule.js';
+import { STATUS, dayPlan, unscheduledIns } from '../lib/schedule.js';
 
 function download(name, rows) {
   const csv = rows.map((r) => r.map((c) => {
@@ -25,11 +25,14 @@ export function Records() {
   const [mode, setMode] = useState(() => (location.hash.includes('flags') ? 'flags' : 'all'));
   const [q, setQ] = useState('');
   const { sessions, issues } = useMemo(() => buildSessions(data.punches), [data.punches]);
+  const offSchedule = useMemo(() => unscheduledIns(data.schedule, data.punches), [data.schedule, data.punches]);
+  const offIds = useMemo(() => new Set(offSchedule.map((p) => p.id)), [offSchedule]);
+  const flags = useMemo(() => issues.concat(offSchedule.map((p) => ({ kind: 'unscheduled', name: p.name, email: p.email, station: p.station, at: new Date(p.ts) }))), [issues, offSchedule]);
   const match = (x) => `${x.name} ${x.email} ${x.station}`.toLowerCase().includes(q.toLowerCase());
 
   const groups = useMemo(() => {
     const items = mode === 'flags'
-      ? issues.filter(match).map((i) => ({ kind: 'issue', at: i.at, i }))
+      ? flags.filter(match).map((i) => ({ kind: 'issue', at: i.at, i }))
       : data.punches.filter(match).map((p) => ({ kind: 'punch', at: new Date(p.ts), p }));
     items.sort((a, b) => b.at - a.at);
     const by = new Map();
@@ -39,13 +42,13 @@ export function Records() {
       by.get(k).push(it);
     }
     return [...by];
-  }, [data.punches, issues, mode, q]);
+  }, [data.punches, flags, mode, q]);
 
   const exportLog = () => {
     const rows = [['Date', 'Time', 'Name', 'Email', 'In/Out', 'Robot / station', 'Note', 'Flag', 'Timestamp (UTC)']];
     for (const p of [...data.punches].sort((a, b) => a.ts.localeCompare(b.ts))) {
       const t = new Date(p.ts);
-      rows.push([dayKey(t), hhmm(t), p.name, p.email, p.type.toUpperCase(), p.station, p.note, p.flag ? 'Left early' : '', p.ts]);
+      rows.push([dayKey(t), hhmm(t), p.name, p.email, p.type.toUpperCase(), p.station, p.note, p.flag ? 'Left early' : offIds.has(p.id) ? 'Not on the schedule' : '', p.ts]);
     }
     download(`onsite-checkins-${dayKey(new Date())}.csv`, rows);
   };
@@ -84,7 +87,7 @@ export function Records() {
           label="Show"
           value={mode}
           onChange={setMode}
-          options={[{ value: 'all', label: 'All check-ins' }, { value: 'flags', label: `Flags${issues.length ? ` (${issues.length})` : ''}` }]}
+          options={[{ value: 'all', label: 'All check-ins' }, { value: 'flags', label: `Flags${flags.length ? ` (${flags.length})` : ''}` }]}
         />
         <label className="search search-inline">
           <Search size={16} aria-hidden="true" />
@@ -99,7 +102,7 @@ export function Records() {
       </Group>
 
       {groups.length === 0 && (
-        <Group><div className="empty-row">{q ? `Nothing matches “${q}”.` : mode === 'flags' ? 'No flags. Early or missed check-outs show up here.' : 'No check-ins yet.'}</div></Group>
+        <Group><div className="empty-row">{q ? `Nothing matches “${q}”.` : mode === 'flags' ? 'No flags. Early or missed check-outs and check-ins with no shift show up here.' : 'No check-ins yet.'}</div></Group>
       )}
       {groups.map(([k, items]) => (
         <Group key={k} title={fmtLongDay(parseDay(k))}>
@@ -107,7 +110,7 @@ export function Records() {
             <Row
               key={it.p.id}
               leading={<span className={`row-icon icon-${it.p.type}`}>{it.p.type === 'in' ? <LogIn size={16} /> : <LogOut size={16} />}</span>}
-              title={<>{it.p.name}{it.p.flag && <Tag tone="bad">Left early</Tag>}</>}
+              title={<>{it.p.name}{it.p.flag && <Tag tone="bad">Left early</Tag>}{offIds.has(it.p.id) && <Tag tone="warn">Not on the schedule</Tag>}</>}
               subtitle={`${it.p.type === 'in' ? 'In' : 'Out'} · ${it.p.station}${it.p.note ? ` · “${it.p.note}”` : ''}`}
               trailing={<span className="mono-num">{fmtTime(it.at)}</span>}
             />
