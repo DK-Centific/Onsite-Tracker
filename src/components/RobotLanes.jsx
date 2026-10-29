@@ -18,7 +18,7 @@ function tipAt(el) {
 }
 
 // One lane per robot across the day. Each operator's time is a thin line labelled with
-// their first name and last initial; the solid bar under them is the merged span, which is what counts as
+// their name (shortened to a last initial when long); the solid bar under them is the merged span, which is what counts as
 // the robot's hours worked. A pair working together reads as one bar.
 // `planned` are scheduled shifts whose person hasn't arrived: drawn as dashed outlines
 // over the time they were due, so a gap in a lane reads as someone missing.
