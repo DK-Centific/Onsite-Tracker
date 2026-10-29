@@ -42,6 +42,7 @@ The unit is the robot, not the person. Two people working the same robot at the 
 - Client "successful hours" are entered weekly by a lead.
 - Schedule: a `Schedule` table (date, person, robot, start, end) says who is expected. Against it, the app shows each shift as on site, not here yet (15 min after start), no-show (shift over, no check-in), or worked; flags check-ins with no shift; and shows a robot as needing a backfill while it has fewer than a pair on site or still due. Leads add, remove and backfill shifts in admin, or edit the sheet directly.
 - Two pages: the check-in page for everyone, and admin (Today, Schedule, Hours, Records) for leads. The people on site are "Operators", never "workers"; on the check-in page the UI uses their names, or "you" and "your robot".
+- Names are unique. Email is identity: the same email keeps the name on record. A new operator whose name is already taken (by another email) is offered the next number, "Jordan Pike 2", and confirms it or changes their name. This applies on the check-in page, the shared tablet and admin's add-shift sheet.
 - Exports: the raw check-in log and per-shift sessions, as CSV.
 - Undecided (waiting on Kate): robot names and count, shift times (the schedule assumes 6 h shifts from 08:00 until told otherwise), the site time zone (assumed Pacific), alert recipients, and the badge-record format.
 - The Team view has no sign-in yet. Anyone with the link can see it.

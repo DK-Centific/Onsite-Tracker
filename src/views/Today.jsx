@@ -3,7 +3,7 @@ import { Bot, CalendarX, ChevronLeft, ChevronRight, ClockAlert, LogOut, Triangle
 import { useStore } from '../lib/store.js';
 import { CFG } from '../lib/config.js';
 import { buildSessions, union } from '../lib/hours.js';
-import { addDays, dayKey, fmtDay, fmtHrs, fmtLongDay, fmtTime, hoursBetween } from '../lib/time.js';
+import { addDays, dayKey, fmtDay, fmtLongDay, fmtTime, hoursBetween, fmtHrsU } from '../lib/time.js';
 import { go, useNow } from '../lib/hooks.js';
 import { Avatar, Group, Num, Row, Tag } from '../components/ui.jsx';
 import { RobotLanes } from '../components/RobotLanes.jsx';
@@ -20,7 +20,7 @@ export const ISSUE = {
 };
 
 export function issueDetail(i) {
-  if (i.kind === 'early') return `Out at ${fmtTime(i.at)} after ${fmtHrs(i.hours)} h${i.note ? ` · “${i.note}”` : ''}`;
+  if (i.kind === 'early') return `Out at ${fmtTime(i.at)} after ${fmtHrsU(i.hours)}${i.note ? ` · “${i.note}”` : ''}`;
   if (i.kind === 'noout') return `In at ${fmtTime(i.at)}, never checked out · hours not counted`;
   return `Out at ${fmtTime(i.at)} with no check-in`;
 }
@@ -111,7 +111,7 @@ export function Today() {
 
       <Group
         title="Robots"
-        action={<span className="group-aside"><Num value={deliveredDay} format={(v) => `${fmtHrs(v)} h`} /> worked</span>}
+        action={<span className="group-aside"><Num value={deliveredDay} format={(v) => `${fmtHrsU(v)}`} /> worked</span>}
         footer="Thin lines are each operator's time. The bar beneath is the robot's hours worked, so two operators working together count once."
       >
         <RobotLanes day={day} sessions={daySessions} planned={plan.rows.filter((r) => r.status === 'late' || r.status === 'noshow' || r.status === 'upcoming')} stations={stations} now={now} pairSize={2} />
@@ -143,7 +143,7 @@ export function Today() {
                 leading={<Avatar name={s.name} tone="on" />}
                 title={s.name}
                 subtitle={`${s.station} · since ${fmtTime(s.start)}`}
-                trailing={<span className="mono-num">{fmtHrs(hoursBetween(s.start, now))} h</span>}
+                trailing={<span className="mono-num">{fmtHrsU(hoursBetween(s.start, now))}</span>}
               />
             )) : <div className="empty-row">Check-ins show up here as operators arrive.</div>}
           </Group>

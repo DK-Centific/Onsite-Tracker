@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useStore } from '../lib/store.js';
 import { CFG } from '../lib/config.js';
 import { buildSessions } from '../lib/hours.js';
-import { addDays, dayKey, firstName, fmtHrs, fmtLongDay, fmtTime, mondayOf, weekLabel } from '../lib/time.js';
+import { addDays, dayKey, fmtLongDay, fmtTime, mondayOf, weekLabel, fmtHrsU, shortName } from '../lib/time.js';
 import { useNow } from '../lib/hooks.js';
 import { Avatar, Group, Row, Sheet, Tag } from '../components/ui.jsx';
 import { ShiftSheet } from '../components/ShiftSheet.jsx';
@@ -51,7 +51,7 @@ export function Schedule() {
       <Group footer="Shifts come from the Schedule sheet in Excel; you can add them here or type them there. Times are site-local.">
         <div className="week-sum">
           <span><strong>{weekRows.length}</strong> shifts</span>
-          <span><strong>{fmtHrs(booked)} h</strong> booked</span>
+          <span><strong>{fmtHrsU(booked)}</strong> booked</span>
           <span>{short.length ? <><strong>{short.length}</strong> understaffed: {short.join(', ')}</> : 'Every running robot has a full pair'}</span>
           {missing > 0 && <span><strong>{missing}</strong> missing</span>}
         </div>
@@ -89,7 +89,7 @@ export function Schedule() {
                       {rows.map((r) => (
                         <span key={r.id} className="chip-person" data-status={r.status}>
                           <Avatar name={r.name} />
-                          {firstName(r.name)}
+                          {shortName(r.name)}
                           <span className="chip-time">{fmtTime(r.startAt)}–{fmtTime(r.endAt)}</span>
                           {(r.status === 'late' || r.status === 'noshow') && <span className="sr-only">{STATUS[r.status].label}</span>}
                         </span>
@@ -103,7 +103,7 @@ export function Schedule() {
               <Row
                 title={<span className="row-sub">Checked in without a shift</span>}
                 subtitle={<span className="chips">{plan.unscheduled.map((u) => (
-                  <span key={u.email} className="chip-person"><Avatar name={u.name} />{firstName(u.name)}<span className="chip-time">{u.station} · {fmtTime(u.start)}</span></span>
+                  <span key={u.email} className="chip-person"><Avatar name={u.name} />{shortName(u.name)}<span className="chip-time">{u.station} · {fmtTime(u.start)}</span></span>
                 ))}</span>}
               />
             )}
@@ -149,7 +149,7 @@ function RobotDaySheet({ value, onClose, plan, onAdd, now }) {
       description={value ? fmtLongDay(new Date(`${value.k}T12:00:00`)) : ''}
       footer={
         late
-          ? <button type="button" className="btn btn-primary btn-block" onClick={() => onAdd({ date: late.date, station: late.station, start: backfillStart(late, now), end: late.end, note: `Backfill for ${late.name}`, backfill: late.name })}>Backfill for {firstName(late.name)}</button>
+          ? <button type="button" className="btn btn-primary btn-block" onClick={() => onAdd({ date: late.date, station: late.station, start: backfillStart(late, now), end: late.end, note: `Backfill for ${late.name}`, backfill: late.name })}>Backfill for {shortName(late.name)}</button>
           : <button type="button" className="btn btn-plain btn-block" onClick={() => onAdd({ date: value?.k, station: value?.station })}>Add someone</button>
       }
     >

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useStore } from '../lib/store.js';
 import { CFG } from '../lib/config.js';
-import { roster } from '../lib/hours.js';
+import { claimName, knownPeople } from '../lib/onboarding.js';
 import { fmtDay, fmtTime, parseDay } from '../lib/time.js';
 import { shiftTimes } from '../lib/schedule.js';
 import { Group, Sheet } from './ui.jsx';
@@ -16,15 +16,17 @@ const validEmail = (e) => /^\S+@\S+\.\S+$/.test(e);
 export function ShiftSheet({ open, onOpenChange, initial, backfill }) {
   const { data, addShift } = useStore();
   const stations = CFG.stations.length ? CFG.stations : ['Robot 1'];
-  const people = useMemo(() => roster(data.punches.concat((data.schedule || []).map((r) => ({ ...r, ts: `${r.date}T00:00:00Z` })))), [data]);
+  const people = useMemo(() => knownPeople(data), [data]);
   const [f, setF] = useState({});
   const [err, setErr] = useState('');
+  const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
   const set = (k) => (e) => setF((x) => ({ ...x, [k]: e.target.value }));
 
   useEffect(() => {
     if (!open) return;
     setErr('');
+    setNote('');
     setF({ date: initial?.date || '', station: initial?.station || stations[0], start: initial?.start || '08:00', end: initial?.end || `${String(8 + CFG.shiftHours).padStart(2, '0')}:00`, who: '', name: '', email: '', note: initial?.note || '' });
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -32,10 +34,16 @@ export function ShiftSheet({ open, onOpenChange, initial, backfill }) {
   const choices = people.filter((p) => !booked.has(p.email));
 
   const save = async () => {
-    const person = f.who === NEW ? { name: f.name.trim(), email: f.email.trim().toLowerCase() } : people.find((p) => p.email === f.who);
+    let person = f.who === NEW ? { name: f.name.trim(), email: f.email.trim().toLowerCase() } : people.find((p) => p.email === f.who);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(f.date || '')) return setErr('Pick a date.');
     if (!person || !person.name) return setErr('Pick an operator.');
     if (!validEmail(person.email)) return setErr('Add a valid email.');
+    if (f.who === NEW) {
+      // Same rule as onboarding: a taken name gets the next number, confirmed first.
+      const c = claimName(person.name, person.email, people);
+      if (c.renamed) { setF((x) => ({ ...x, name: c.name })); setErr(''); return setNote(`There's already a ${c.takenBy}, so this operator will show as ${c.name}. Save again to confirm, or change the name.`); }
+      person = { name: c.name, email: c.email };
+    }
     if (!f.start || !f.end) return setErr('Add a start and end time.');
     setBusy(true);
     setErr('');
@@ -58,7 +66,7 @@ export function ShiftSheet({ open, onOpenChange, initial, backfill }) {
       description={backfill ? `Covering for ${backfill}. Pick someone who isn't booked that day.` : 'Shifts are site-local times.'}
       footer={<button type="button" className="btn btn-primary btn-block" onClick={save} disabled={busy} aria-busy={busy}>{busy ? 'Saving…' : backfill ? 'Assign backfill' : 'Add shift'}</button>}
     >
-      <Group footer={err ? <span className="err" role="alert">{err}</span> : undefined}>
+      <Group footer={err ? <span className="err" role="alert">{err}</span> : note ? <span role="status">{note}</span> : undefined}>
         <label className="field-row">
           <span>Operator</span>
           <select value={f.who || ''} onChange={set('who')} className="field-select">
@@ -69,7 +77,7 @@ export function ShiftSheet({ open, onOpenChange, initial, backfill }) {
         </label>
         {f.who === NEW && (
           <>
-            <label className="field-row"><span>Name</span><input value={f.name} onChange={set('name')} placeholder="Full name" autoComplete="off" /></label>
+            <label className="field-row"><span>Name</span><input value={f.name} onChange={(e) => { set('name')(e); setNote(''); }} placeholder="Full name" autoComplete="off" /></label>
             <label className="field-row"><span>Email</span><input value={f.email} onChange={set('email')} type="email" inputMode="email" placeholder="name@company.com" autoComplete="off" /></label>
           </>
         )}

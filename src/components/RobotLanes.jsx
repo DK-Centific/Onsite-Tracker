@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { union } from '../lib/hours.js';
-import { fmtHrs, fmtTime, shortName } from '../lib/time.js';
+import { fmtHrs, fmtTime, shortName, fmtHrsU } from '../lib/time.js';
 import { Tag } from './ui.jsx';
 import { TriangleAlert } from 'lucide-react';
 
@@ -65,7 +65,7 @@ export function RobotLanes({ day, sessions, planned = [], stations, now, pairSiz
             <div className="lane-label">
               <span className="lane-name">{name}</span>
               <span className="lane-meta">
-                {mine.length === 0 ? (due.length ? 'No one checked in' : 'Idle') : `${fmtHrs(hours)} h worked`}
+                {mine.length === 0 ? (due.length ? 'No one checked in' : 'Idle') : `${fmtHrsU(hours)} worked`}
               </span>
               {short && <Tag tone="warn" icon={<TriangleAlert size={12} />}>{liveNow} of {pairSize} on site</Tag>}
             </div>
@@ -121,7 +121,7 @@ export function RobotLanes({ day, sessions, planned = [], stations, now, pairSiz
       {tip?.s && (
         <div className="lane-tip" data-below={tip.below || undefined} style={{ left: tip.left, top: tip.top }} role="tooltip">
           <strong>{tip.s.name}</strong>
-          <span>{fmtTime(tip.s.start)} – {tip.s.live ? 'now' : fmtTime(tip.s.end)} · {fmtHrs(tip.s.hours)} h</span>
+          <span>{fmtTime(tip.s.start)} – {tip.s.live ? 'now' : fmtTime(tip.s.end)} · {fmtHrsU(tip.s.hours)}</span>
           {tip.s.early && <span className="tip-early">Left early{tip.s.note ? `: ${tip.s.note}` : ''}</span>}
         </div>
       )}

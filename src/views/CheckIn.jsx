@@ -5,13 +5,15 @@ import { Check, ChevronRight, Search, Tablet, UserPlus } from 'lucide-react';
 import { useStore } from '../lib/store.js';
 import { CFG } from '../lib/config.js';
 import { roster, statusOf, buildSessions } from '../lib/hours.js';
-import { addDays, firstName, fmtHrs, fmtLongDay, fmtTime, greeting, hoursBetween, dayKey, mondayOf } from '../lib/time.js';
+import { claimName, knownPeople } from '../lib/onboarding.js';
+import { addDays, firstName, fmtLongDay, fmtTime, greeting, hoursBetween, dayKey, mondayOf, fmtHrsU, hrUnit, shortName } from '../lib/time.js';
 import { useNow } from '../lib/hooks.js';
 import { Avatar, Group, Num, Row, Sheet, Tag } from '../components/ui.jsx';
 import { ShiftRing } from '../components/ShiftRing.jsx';
 import { RobotLanes } from '../components/RobotLanes.jsx';
 
 const validEmail = (e) => /^\S+@\S+\.\S+$/.test(e);
+const takenNote = (c) => `There's already a ${c.takenBy} here, so you'll show as ${c.name}. Continue to confirm, or change your name.`;
 
 export function CheckIn() {
   const { me, device, data } = useStore();
@@ -101,7 +103,7 @@ function CheckinAside({ person, picked }) {
         </Group>
       )}
       {person && (
-        <Group title="Your week" action={<span className="group-aside"><Num value={weekTotal} format={(v) => `${fmtHrs(v)} h`} /></span>}>
+        <Group title="Your week" action={<span className="group-aside"><Num value={weekTotal} format={(v) => `${fmtHrsU(v)}`} /></span>}>
           {days.map((d) => {
             const h = mine.filter((s) => s.day === dayKey(d)).reduce((a, s) => a + s.hours, 0);
             const isToday = dayKey(d) === today;
@@ -110,7 +112,7 @@ function CheckinAside({ person, picked }) {
                 key={+d}
                 title={isToday ? 'Today' : d.toLocaleDateString([], { weekday: 'long' })}
                 subtitle={d.toLocaleDateString([], { month: 'short', day: 'numeric' })}
-                trailing={<span className={clsx('mono-num', !h && 'muted')}>{h ? `${fmtHrs(h)} h` : d > now ? '' : '–'}</span>}
+                trailing={<span className={clsx('mono-num', !h && 'muted')}>{h ? `${fmtHrsU(h)}` : d > now ? '' : '–'}</span>}
               />
             );
           })}
@@ -121,15 +123,19 @@ function CheckinAside({ person, picked }) {
 }
 
 function Welcome() {
-  const { setMe, setDevice } = useStore();
+  const { data, setMe, setDevice } = useStore();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [err, setErr] = useState('');
+  const [note, setNote] = useState('');
   const submit = (e) => {
     e.preventDefault();
     if (!name.trim()) return setErr('Add your full name.');
     if (!validEmail(email.trim())) return setErr('Add a valid email.');
-    setMe({ name: name.trim(), email: email.trim().toLowerCase(), station: '' });
+    const c = claimName(name, email, knownPeople(data));
+    setErr('');
+    if (c.renamed) { setName(c.name); return setNote(takenNote(c)); }
+    setMe({ name: c.name, email: c.email, station: '' });
     setDevice('personal');
   };
   return (
@@ -137,10 +143,10 @@ function Welcome() {
       <h1 className="large-title">Welcome</h1>
       <p className="lede">Tell us who you are once. This phone remembers you, so checking in takes one tap.</p>
       <form onSubmit={submit} noValidate>
-        <Group footer={err ? <span className="err" role="alert">{err}</span> : 'Use your work email for this project.'}>
+        <Group footer={err ? <span className="err" role="alert">{err}</span> : note ? <span role="status">{note}</span> : 'Use your work email for this project.'}>
           <label className="field-row">
             <span>Name</span>
-            <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Full name" aria-invalid={!!err && !name.trim()} />
+            <input value={name} onChange={(e) => { setName(e.target.value); setNote(''); }} autoComplete="name" placeholder="Full name" aria-invalid={!!err && !name.trim()} />
           </label>
           <label className="field-row">
             <span>Email</span>
@@ -202,15 +208,20 @@ function WhoIsHere({ onPick }) {
 }
 
 function NewPersonSheet({ open, onOpenChange, onDone, initialName }) {
+  const { data } = useStore();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [err, setErr] = useState('');
-  useEffect(() => { if (open) { setName(initialName || ''); setEmail(''); setErr(''); } }, [open, initialName]);
+  const [note, setNote] = useState('');
+  useEffect(() => { if (open) { setName(initialName || ''); setEmail(''); setErr(''); setNote(''); } }, [open, initialName]);
   const submit = (e) => {
     e?.preventDefault();
     if (!name.trim()) return setErr('Add your full name.');
     if (!validEmail(email.trim())) return setErr('Add a valid email.');
-    onDone({ name: name.trim(), email: email.trim().toLowerCase() });
+    const c = claimName(name, email, knownPeople(data));
+    setErr('');
+    if (c.renamed) { setName(c.name); return setNote(takenNote(c)); }
+    onDone({ name: c.name, email: c.email });
   };
   return (
     <Sheet
@@ -221,8 +232,8 @@ function NewPersonSheet({ open, onOpenChange, onDone, initialName }) {
       footer={<button type="button" className="btn btn-primary btn-block" onClick={submit}>Continue</button>}
     >
       <form onSubmit={submit} noValidate>
-        <Group footer={err && <span className="err" role="alert">{err}</span>}>
-          <label className="field-row"><span>Name</span><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" autoComplete="off" /></label>
+        <Group footer={err ? <span className="err" role="alert">{err}</span> : note ? <span role="status">{note}</span> : undefined}>
+          <label className="field-row"><span>Name</span><input value={name} onChange={(e) => { setName(e.target.value); setNote(''); }} placeholder="Full name" autoComplete="off" /></label>
           <label className="field-row"><span>Email</span><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" inputMode="email" placeholder="name@company.com" autoComplete="off" /></label>
         </Group>
       </form>
@@ -297,7 +308,7 @@ function Person({ person, onDone, onSwitch, onStation, shared }) {
           open={askReason}
           onOpenChange={setAskReason}
           title="Leaving early?"
-          description={`You've been on site ${fmtHrs(elapsed)} h of a ${CFG.shiftHours} h shift. Your leads will be told, so let them know why.`}
+          description={`You've been on site ${fmtHrsU(elapsed)} of a ${CFG.shiftHours} ${hrUnit(CFG.shiftHours)} shift. Your leads will be told, so let them know why.`}
           footer={
             <button
               type="button"
@@ -347,7 +358,7 @@ function Person({ person, onDone, onSwitch, onStation, shared }) {
                   {on.length ? (
                     <>
                       <span className="avatars">{on.map((p) => <Avatar key={p.email} name={p.name} />)}</span>
-                      {on.length === 1 ? firstName(on[0].name) : `${on.length} on site`}
+                      <span className="robot-who-name">{on.length === 1 ? shortName(on[0].name) : `${on.length} on site`}</span>
                     </>
                   ) : 'Free'}
                 </span>
@@ -385,7 +396,7 @@ function Done({ done, onNext, shared }) {
       <p className="done-time">{fmtTime(done.at)}</p>
       <p className="lede">
         {done.name} · {done.station}
-        {done.type === 'out' && done.hours > 0 ? ` · ${fmtHrs(done.hours)} h today` : ''}
+        {done.type === 'out' && done.hours > 0 ? ` · ${fmtHrsU(done.hours)} today` : ''}
       </p>
       {done.early && <Tag tone="bad">Left early · leads notified</Tag>}
       <div className="dock">

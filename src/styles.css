@@ -378,7 +378,8 @@ p.err { text-align: center; margin: 0 0 12px; }
   transition: scale 150ms var(--ease-out), background-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
 }
 .robot-name { font-weight: 600; font-size: 1rem; }
-.robot-who { display: flex; align-items: center; gap: 6px; font-size: 0.8125rem; color: var(--ink-2); }
+.robot-who { display: flex; align-items: center; gap: 6px; font-size: 0.8125rem; color: var(--ink-2); min-width: 0; }
+.robot-who-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .robot.is-on { background: var(--blue-soft); box-shadow: var(--well), inset 0 0 0 2px var(--blue); }
 .robot.is-on .robot-name { color: var(--blue-text); }
 .robot-check {

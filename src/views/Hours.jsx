@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { useStore } from '../lib/store.js';
 import { summarize } from '../lib/hours.js';
-import { addDays, dayKey, fmtDay, fmtHrs, fmtTime, mondayOf, weekLabel } from '../lib/time.js';
+import { addDays, dayKey, fmtDay, fmtHrs, fmtTime, mondayOf, weekLabel, fmtHrsU } from '../lib/time.js';
 import { useNow } from '../lib/hooks.js';
 import { shiftHours } from '../lib/schedule.js';
 import { Avatar, Group, Num, Row, Sheet, Tag } from '../components/ui.jsx';
@@ -28,7 +28,7 @@ export function Hours() {
     if (v === (succ ?? null)) return;
     try {
       await setClientHours(wkKey, v);
-      setSaved(v == null ? 'Cleared' : `Saved: ${fmtHrs(v)} h`);
+      setSaved(v == null ? 'Cleared' : `Saved: ${fmtHrsU(v)}`);
     } catch (e) {
       toast.error("Couldn't save successful hours", { description: e.message });
     }
@@ -74,17 +74,17 @@ export function Hours() {
             <div className="compare-row">
               <span className="compare-label">Hours worked</span>
               <span className="compare-track"><span className="compare-bar bar-blue reveal-x" style={{ width: `${(sum.deliveredWeek / max) * 100}%` }} /></span>
-              <Num className="compare-val" value={sum.deliveredWeek} format={(v) => `${fmtHrs(v)} h`} />
+              <Num className="compare-val" value={sum.deliveredWeek} format={(v) => `${fmtHrsU(v)}`} />
             </div>
             {succ != null && (
               <div className="compare-row">
                 <span className="compare-label">Successful</span>
                 <span className="compare-track"><span className="compare-bar bar-green reveal-x" style={{ width: `${(succ / max) * 100}%` }} /></span>
-                <span className="compare-val">{`${fmtHrs(succ)} h`}</span>
+                <span className="compare-val">{`${fmtHrsU(succ)}`}</span>
               </div>
             )}
           </div>
-          <Row title="Operator hours" trailing={<Num value={sum.personWeek} format={(v) => `${fmtHrs(v)} h`} />} />
+          <Row title="Operator hours" trailing={<Num value={sum.personWeek} format={(v) => `${fmtHrsU(v)}`} />} />
           <label className="field-row">
             <span>Client successful hours</span>
             <input
@@ -105,9 +105,9 @@ export function Hours() {
         </Group>
 
         <Group title="To date">
-          <Row title="Hours worked" trailing={<Num value={sum.deliveredAll} format={(v) => `${fmtHrs(v)} h`} />} />
-          <Row title="Operator hours" trailing={<Num value={sum.personAll} format={(v) => `${fmtHrs(v)} h`} />} />
-          <Row title="Successful (reported)" trailing={`${fmtHrs(data.client.reduce((a, c) => a + c.hours, 0))} h`} />
+          <Row title="Hours worked" trailing={<Num value={sum.deliveredAll} format={(v) => `${fmtHrsU(v)}`} />} />
+          <Row title="Operator hours" trailing={<Num value={sum.personAll} format={(v) => `${fmtHrsU(v)}`} />} />
+          <Row title="Successful (reported)" trailing={`${fmtHrsU(data.client.reduce((a, c) => a + c.hours, 0))}`} />
         </Group>
       </div>
 
@@ -123,7 +123,7 @@ export function Hours() {
               <Avatar name={p.name} />
               <span className="row-main">
                 <span className="row-title">{p.name}{p.issues?.length ? <span className="dot-warn" aria-label={`${p.issues.length} flags`} /> : null}</span>
-                <span className="row-sub">{Object.keys(p.byDay).length} days{p.planned ? ` · ${fmtHrs(p.planned)} h scheduled` : ''}</span>
+                <span className="row-sub">{Object.keys(p.byDay).length} days{p.planned ? ` · ${fmtHrsU(p.planned)} scheduled` : ''}</span>
               </span>
             </span>
             {days.map((d) => {
@@ -139,7 +139,7 @@ export function Hours() {
         open={!!person}
         onOpenChange={(o) => !o && setPerson(null)}
         title={person?.name || ''}
-        description={person ? `${person.email} · ${fmtHrs(person.total)} h this week` : ''}
+        description={person ? `${person.email} · ${fmtHrsU(person.total)} this week` : ''}
       >
         {person && (
           <Group>
@@ -148,7 +148,7 @@ export function Hours() {
                 key={+s.start}
                 title={`${fmtDay(s.start)} · ${s.station}`}
                 subtitle={`${fmtTime(s.start)} – ${s.live ? 'now' : fmtTime(s.end)}${s.note ? ` · “${s.note}”` : ''}`}
-                trailing={<>{s.early && <Tag tone="bad">Left early</Tag>}<span className="mono-num">{fmtHrs(s.hours)} h</span></>}
+                trailing={<>{s.early && <Tag tone="bad">Left early</Tag>}<span className="mono-num">{fmtHrsU(s.hours)}</span></>}
               />
             ))}
             {(person.issues || []).filter((i) => i.kind !== 'early').map((i) => (

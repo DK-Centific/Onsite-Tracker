@@ -13,6 +13,9 @@ export const fmtTime = (d) => d.toLocaleTimeString([], { hour: 'numeric', minute
 export const fmtDay = (d) => d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
 export const fmtLongDay = (d) => d.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
 export const fmtHrs = (h) => (Math.round(h * 10) / 10).toFixed(1);
+// Hours with their unit, spelled out for clarity: "6.0 hrs", "1.0 hr".
+export const hrUnit = (h) => (fmtHrs(h) === '1.0' ? 'hr' : 'hrs');
+export const fmtHrsU = (h) => `${fmtHrs(h)} ${hrUnit(h)}`;
 // 2.25 -> "2:15"
 export const fmtClock = (h) => {
   const m = Math.max(0, Math.floor(h * 60));
@@ -33,5 +36,12 @@ export const initials = (name) => name.split(/\s+/).filter(Boolean).slice(0, 2).
 // Full name for lane labels; a long one ("Alexandra Montgomery-Whitfield") shortens to
 // "Alexandra M." so it stays on one short line.
 export const LABEL_MAX = 18;
-export const shortName = (name) => { const full = name.trim().replace(/\s+/g, ' '); const p = full.split(' '); return full.length <= LABEL_MAX || p.length < 2 ? full : `${p[0]} ${p[p.length - 1][0].toUpperCase()}.`; };
+// A duplicate-name number ("Jordan Pike 2") is kept: "Alexandra M. 2".
+export const shortName = (name) => {
+  const full = name.trim().replace(/\s+/g, ' ');
+  if (full.length <= LABEL_MAX) return full;
+  const [, rest, num] = full.match(/^(.*?)(?:\s(\d+))?$/);
+  const p = rest.split(' ');
+  return p.length < 2 ? full : `${p[0]} ${p[p.length - 1][0].toUpperCase()}.${num ? ` ${num}` : ''}`;
+};
 export const firstName = (name) => name.trim().split(/\s+/)[0] || name;

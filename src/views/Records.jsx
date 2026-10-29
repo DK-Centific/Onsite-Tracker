@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Download, LogIn, LogOut, Search } from 'lucide-react';
 import { useStore } from '../lib/store.js';
 import { buildSessions } from '../lib/hours.js';
-import { dayKey, fmtHrs, fmtLongDay, fmtTime, pad, parseDay } from '../lib/time.js';
+import { dayKey, fmtLongDay, fmtTime, pad, parseDay, fmtHrsU } from '../lib/time.js';
 import { Group, Row, Segmented, Tag } from '../components/ui.jsx';
 import { ISSUE, issueDetail } from './Today.jsx';
 import { STATUS, dayPlan } from '../lib/schedule.js';
@@ -117,7 +117,7 @@ export function Records() {
               leading={<span className={`row-icon icon-${ISSUE[it.i.kind].tone}`}>{ISSUE[it.i.kind].icon}</span>}
               title={<>{it.i.name} <Tag tone={ISSUE[it.i.kind].tone}>{ISSUE[it.i.kind].label}</Tag></>}
               subtitle={`${it.i.station} · ${issueDetail(it.i)}`}
-              trailing={it.i.hours != null ? <span className="mono-num">{fmtHrs(it.i.hours)} h</span> : null}
+              trailing={it.i.hours != null ? <span className="mono-num">{fmtHrsU(it.i.hours)}</span> : null}
             />
           ))}
         </Group>
