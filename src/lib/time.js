@@ -30,4 +30,6 @@ export const greeting = (d = new Date()) => {
   return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
 };
 export const initials = (name) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((s) => s[0].toUpperCase()).join('');
+// "Jordan Pike" -> "Jordan P.", so lane labels stay short but unambiguous.
+export const shortName = (name) => { const p = name.trim().split(/\s+/); return p.length > 1 ? `${p[0]} ${p[p.length - 1][0].toUpperCase()}.` : p[0] || name; };
 export const firstName = (name) => name.trim().split(/\s+/)[0] || name;

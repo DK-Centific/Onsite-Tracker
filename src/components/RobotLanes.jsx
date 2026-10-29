@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { union } from '../lib/hours.js';
-import { fmtHrs, fmtTime, initials } from '../lib/time.js';
+import { fmtHrs, fmtTime, shortName } from '../lib/time.js';
 import { Tag } from './ui.jsx';
 import { TriangleAlert } from 'lucide-react';
 
@@ -17,8 +17,8 @@ function tipAt(el) {
   return { left: Math.max(120, Math.min(r.width - 120, mid)), top: below ? b.bottom - r.top : b.top - r.top, below };
 }
 
-// One lane per robot across the day. Each person's time is a thin line labelled with
-// their initials; the solid bar under them is the merged span, which is what counts as
+// One lane per robot across the day. Each operator's time is a thin line labelled with
+// their first name and last initial; the solid bar under them is the merged span, which is what counts as
 // the robot's hours worked. A pair working together reads as one bar.
 // `planned` are scheduled shifts whose person hasn't arrived: drawn as dashed outlines
 // over the time they were due, so a gap in a lane reads as someone missing.
@@ -78,11 +78,11 @@ export function RobotLanes({ day, sessions, planned = [], stations, now, pairSiz
                     className="person-span"
                     data-live={s.live || undefined}
                     data-early={s.early || undefined}
-                    data-short={(s.end - s.start) / H / span < 0.04 || undefined}
+                    data-short={(s.end - s.start) / H / span < 0.12 ? ((s.start - base) / H - from) / span > 0.8 ? 'end' : 'start' : undefined}
                     style={{ left: x(s.start), width: w(s.start, s.end), animationDelay: `${i * 60}ms` }}
                     onPointerEnter={(e) => setTip({ s, ...tipAt(e.currentTarget) })}
                   >
-                    <span className="person-ini">{initials(s.name)}</span>
+                    <span className="person-ini">{shortName(s.name)}</span>
                     <span className="person-line" />
                   </div>
                 ))}
@@ -94,7 +94,7 @@ export function RobotLanes({ day, sessions, planned = [], stations, now, pairSiz
                     style={{ left: x(p.startAt), width: w(p.startAt, p.endAt) }}
                     onPointerEnter={(e) => setTip({ plan: p, ...tipAt(e.currentTarget) })}
                   >
-                    <span className="person-ini">{initials(p.name)}</span>
+                    <span className="person-ini">{shortName(p.name)}</span>
                     <span className="person-line" />
                   </div>
                 ))}

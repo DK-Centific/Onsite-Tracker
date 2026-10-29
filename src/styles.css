@@ -456,7 +456,7 @@ p.err { text-align: center; margin: 0 0 12px; }
 .gridline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--sep); }
 .lane-people { position: relative; display: flex; flex-direction: column; gap: 2px; padding-top: 2px; }
 .person-span { position: relative; height: 22px; min-width: 4px; animation: fade 260ms var(--ease-out) both; }
-.person-ini { position: absolute; left: 0; top: -1px; font-size: 0.6875rem; font-weight: 600; color: var(--ink-2); line-height: 1; letter-spacing: 0.02em; }
+.person-ini { position: absolute; left: 0; top: -1px; font-size: 0.6875rem; font-weight: 600; color: var(--ink-2); line-height: 1; letter-spacing: 0.01em; white-space: nowrap; }
 .person-line { position: absolute; left: 0; right: 0; bottom: 3px; height: 3px; border-radius: 999px; background: var(--ink-3); opacity: 0.55; }
 .person-span[data-live] .person-line { background: var(--green-dot); opacity: 1; }
 .person-span[data-live] .person-line::after { content: ""; position: absolute; right: -3px; top: -2.5px; width: 8px; height: 8px; border-radius: 50%; background: var(--green-dot); box-shadow: 0 0 0 2px var(--surface); animation: breathe 1.2s var(--ease-loop) infinite alternate; }
@@ -620,6 +620,7 @@ p.err { text-align: center; margin: 0 0 12px; }
 
 /* A span too short to hold its initials puts them just right of the line's end (clear of the now-line). */
 .person-span[data-short] .person-ini { left: calc(100% + 8px); top: 4px; }
+.person-span[data-short="end"] .person-ini { left: auto; right: calc(100% + 8px); }
 @media (min-width: 640px) {
   .is-shared .checkin-aside .row { min-height: 64px; }
   .is-shared .checkin-aside .row-title { font-size: 1.0625rem; }
