@@ -45,9 +45,32 @@ export function normPunch(p) {
   };
 }
 
+// "8:00", "08:00:00" or an Excel day fraction (0.333…) all become "08:00".
+const hhmm = (v) => {
+  if (typeof v === 'number' || /^0?\.\d+$/.test(String(v))) { const m = Math.round(Number(v) * 1440); return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`; }
+  const [h, m = '0'] = String(v ?? '').trim().split(':');
+  return `${String(Number(h) || 0).padStart(2, '0')}:${String(Number(m) || 0).padStart(2, '0')}`;
+};
+
+export function normShift(r) {
+  let date = r.date ?? r.Date ?? '';
+  if (typeof date === 'number' || /^\d{5}$/.test(String(date))) date = new Date(Math.round((Number(date) - 25569) * 864e5)).toISOString();
+  return {
+    id: String(r.id ?? r.ID ?? ''),
+    date: String(date).slice(0, 10),
+    name: String(r.name ?? r.Name ?? '').trim(),
+    email: String(r.email ?? r.Email ?? '').trim().toLowerCase(),
+    station: String(r.station ?? r.Station ?? ''),
+    start: hhmm(r.start ?? r.Start),
+    end: hhmm(r.end ?? r.End),
+    note: String(r.note ?? r.Note ?? ''),
+  };
+}
+
 const normAll = (d) => ({
   punches: (d.punches || []).filter((p) => p.ts ?? p.Timestamp).map(normPunch),
   client: (d.client || []).map((c) => ({ week: String(c.week ?? c.Week ?? '').slice(0, 10), hours: Number(c.hours ?? c.SuccessfulHours) || 0 })),
+  schedule: (d.schedule || []).map(normShift).filter((r) => r.date && r.email),
 });
 
 export const api = {
@@ -64,13 +87,23 @@ export const api = {
     if (DEMO) return demo.clientHours(week, hours);
     await paPost(WRITE_URL, { action: 'client', week, hours });
   },
+  async addShift(shift) {
+    if (DEMO) return demo.addShift(shift);
+    const out = await paPost(WRITE_URL, { action: 'schedule_add', ...shift });
+    return normShift(out.shift);
+  },
+  async removeShift(id) {
+    if (DEMO) return demo.removeShift(id);
+    await paPost(WRITE_URL, { action: 'schedule_delete', id });
+  },
 };
 
 export const demo = {
-  KEY: 'onsite-demo-v2',
+  KEY: 'onsite-demo-v3',
   load() {
     let d = storage.get(this.KEY, null);
     if (!d) { d = seed(); storage.set(this.KEY, d); }
+    d.schedule ||= [];
     return structuredClone(d);
   },
   punch(b) {
@@ -85,6 +118,18 @@ export const demo = {
     d.client = d.client.filter((c) => c.week !== week).concat(hours == null ? [] : [{ week, hours }]);
     storage.set(this.KEY, d);
   },
+  addShift(shift) {
+    const d = this.load();
+    const r = normShift({ id: crypto.randomUUID(), ...shift });
+    d.schedule.push(r);
+    storage.set(this.KEY, d);
+    return r;
+  },
+  removeShift(id) {
+    const d = this.load();
+    d.schedule = d.schedule.filter((r) => r.id !== id);
+    storage.set(this.KEY, d);
+  },
   reset() { storage.remove(this.KEY); },
 };
 
@@ -97,7 +142,10 @@ function seed() {
   ];
   const stations = CFG.stations.length ? CFG.stations : ['Robot 1', 'Robot 2', 'Robot 3'];
   const punches = [];
+  const schedule = [];
   let seq = 1;
+  const plan = (d, who, station, note = '') =>
+    schedule.push({ id: `demo-s${seq++}`, date: dayKey(d), name: who[0], email: who[1], station, start: '08:00', end: `${String(8 + CFG.shiftHours).padStart(2, '0')}:00`, note });
   let s = 7;
   const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
   const push = (t, who, type, station, extra = {}) =>
@@ -105,6 +153,18 @@ function seed() {
   const now = new Date();
   const start = addDays(mondayOf(now), -7);
   const at = (d, mins) => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8, 0, 0, 0).getTime() + mins * 60000;
+  // The plan runs through next Friday: three robots, two people each. Next Thursday
+  // Robot 2 has only one person booked, so the Schedule tab shows an understaffed day.
+  const planEnd = addDays(mondayOf(now), 11);
+  for (let d = new Date(start); d <= planEnd; d = addDays(d, 1)) {
+    if (d.getDay() === 0 || d.getDay() === 6) continue;
+    const nextThu = dayKey(d) === dayKey(addDays(mondayOf(now), 10));
+    for (let pair = 0; pair < 3; pair++) {
+      const station = stations[pair % stations.length];
+      plan(d, people[pair * 2], station);
+      if (!(nextThu && pair === 1)) plan(d, people[pair * 2 + 1], station);
+    }
+  }
   for (let d = new Date(start); dayKey(d) <= dayKey(now); d = addDays(d, 1)) {
     if (d.getDay() === 0 || d.getDay() === 6) continue;
     const today = dayKey(d) === dayKey(now);
@@ -131,6 +191,15 @@ function seed() {
       push(outB, b, 'out', station, early ? { flag: 'early', note: 'Felt unwell, told the client lead' } : {});
     }
   }
+  // Two bench people who covered Robot 4 last Friday; free today, so they can backfill.
+  const bench = [['Jamie Ortiz', 'jamie.ortiz@example.com'], ['Priya Raman', 'priya.raman@example.com']];
+  const fri = addDays(start, 4);
+  const station4 = stations[3] || stations[stations.length - 1];
+  for (const [i, who] of bench.entries()) {
+    plan(fri, who, station4);
+    push(new Date(at(fri, i * 4)), who, 'in', station4);
+    push(new Date(at(fri, CFG.shiftHours * 60 + i * 3)), who, 'out', station4);
+  }
   punches.sort((x, y) => x.ts.localeCompare(y.ts));
-  return { punches, client: [{ week: dayKey(start), hours: 61.5 }] };
+  return { punches, client: [{ week: dayKey(start), hours: 61.5 }], schedule };
 }

@@ -219,14 +219,14 @@ Depth is the Twilight/Atlas definition (user-pinned): a 0.5px edge on every surf
 - Inset grouped lists on a grey ground; separators are 0.5px inset hairlines, never full borders.
 - Four job colors, each with a solid, a text-safe tone and a soft tint; separately tuned in dark mode.
 - 0.5px edges everywhere, paired raise on tactile objects, wells on inputs and tracks.
-- Robot lanes: thin initialled person lines over a merged blue delivered bar.
+- Robot lanes: thin initialled person lines over a merged blue hours-worked bar.
 
 ## Colors
 
 A cool, near-neutral Google grey world where four job colors carry all meaning.
 
 ### Primary
-- **Action Blue** (action-blue; dark: action-blue-dark): Primary buttons, selected robot tile ring, focus outlines, caret, the merged delivered bar in robot lanes, the delivered bar in Hours. Hover deepens to action-blue-hover. Text-on-ground uses action-blue-text (active tab, active sidebar link, links, selected tile name). Selection backgrounds use action-blue-soft.
+- **Action Blue** (action-blue; dark: action-blue-dark): Primary buttons, selected robot tile ring, focus outlines, caret, the merged hours-worked bar in robot lanes, the hours-worked bar in Hours. Hover deepens to action-blue-hover. Text-on-ground uses action-blue-text (active tab, active sidebar link, links, selected tile name). Selection backgrounds use action-blue-soft.
 
 ### Secondary
 - **On-Site Green** (on-site-green; dot variant on-site-green-dot): Live person lines and their breathing end dot, the shift ring's progress, on-site avatars, the station chip under the ring, "saved" text, the client's successful-hours bar.
@@ -339,7 +339,7 @@ A Fill well with a 3px pad; the selected option is a surface pill (lighter grey 
 - **Phone:** Translucent top bar with sync and settings; fixed four-column tab bar, 48px targets, micro labels, active tab in blue text. Icons are Lucide line icons throughout.
 
 ### Robot lanes (signature)
-One lane per robot across the working day (7 AM to 7 PM), a 168px label column (robot name, "x h delivered", optional attention tag) beside the track. Each person's span is a thin 3px rounded line labelled with initials above its start; live spans turn green with a breathing end dot, early spans end in a red tick. Beneath the people, the merged span of everyone's time is a 10px Action Blue bar: delivered time, so a pair working together visibly counts once. Hour gridlines are separator hairlines; today has a 2px ink now-line with a dot cap. Hovering a span shows an ink tooltip with name, times and hours. Short spans move their initials past the line end.
+One lane per robot across the working day (7 AM to 7 PM), a 168px label column (robot name, "x h worked", optional attention tag) beside the track. Each person's span is a thin 3px rounded line labelled with initials above its start; live spans turn green with a breathing end dot, early spans end in a red tick. Beneath the people, the merged span of everyone's time is a 10px Action Blue bar: the robot's hours worked, so a pair working together visibly counts once. Hour gridlines are separator hairlines; today has a 2px ink now-line with a dot cap. Hovering a span shows an ink tooltip with name, times and hours. Short spans move their initials past the line end.
 
 ### Shift ring
 A raised circle (up to 280px) holding a 14px-stroke ring: fill track, green progress (blue once the shift is complete), the elapsed time in display type, "of 6:00 shift" and a green station chip.
@@ -355,7 +355,7 @@ Two-column grid of raised 14px tiles (84px minimum) with robot name and overlapp
 - **Do** give every surface its 0.5px edge, and reserve the paired raise for tactile objects.
 - **Do** use the text tone of a job color for words and the soft tint behind it.
 - **Do** tune any new color separately for light and dark, in both the media-query and `[data-theme]` blocks.
-- **Do** show any per-robot timing as robot lanes: person lines over the merged delivered bar.
+- **Do** show any per-robot timing as robot lanes: person lines over the merged hours-worked bar.
 - **Do** follow `ux-behavior-spec.md` for every hover, press, transition and reduced-motion behaviour.
 
 ### Don't:
@@ -364,4 +364,4 @@ Two-column grid of raised 14px tiles (84px minimum) with robot name and overlapp
 - **Don't** set yellow solid as text, or small text in tertiary ink on the grey ground (about 4.1:1); use secondary ink there.
 - **Don't** add webfonts, display faces or brand marks; the client's logos and wordmarks are never used.
 - **Don't** build the category default: a time-clock form beside stacked KPI cards. Status is a sentence and lanes, not tiles of numbers.
-- **Don't** stack bars for a pair or sum their hours as delivered; delivered and person hours are always labelled distinctly.
+- **Don't** stack bars for a pair or sum their hours as hours worked; hours worked and person hours are always labelled distinctly.

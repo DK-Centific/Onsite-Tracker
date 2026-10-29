@@ -5,6 +5,7 @@ import { useStore } from '../lib/store.js';
 import { summarize } from '../lib/hours.js';
 import { addDays, dayKey, fmtDay, fmtHrs, fmtTime, mondayOf, weekLabel } from '../lib/time.js';
 import { useNow } from '../lib/hooks.js';
+import { shiftHours } from '../lib/schedule.js';
 import { Avatar, Group, Num, Row, Sheet, Tag } from '../components/ui.jsx';
 
 export function Hours() {
@@ -43,8 +44,14 @@ export function Hours() {
       r.sessions.push(s);
     }
     for (const i of sum.weekIssues) if (m.has(i.email)) (m.get(i.email).issues ||= []).push(i);
+    // Scheduled hours too, so someone booked who never came still shows, at 0.
+    for (const r of (data.schedule || []).filter((x) => x.date >= dayKey(wk0) && x.date < dayKey(wk1))) {
+      if (!m.has(r.email)) m.set(r.email, { name: r.name, email: r.email, byDay: {}, total: 0, sessions: [] });
+      const p = m.get(r.email);
+      p.planned = (p.planned || 0) + shiftHours(r);
+    }
     return [...m.values()].sort((a, b) => a.name.localeCompare(b.name));
-  }, [sum]);
+  }, [sum, data.schedule, wkKey]);
   const max = Math.max(sum.deliveredWeek, succ || 0, 1);
 
   return (
@@ -62,10 +69,10 @@ export function Hours() {
       </header>
 
       <div className="split">
-        <Group title="This week" footer="Delivered hours count robot time, so a pair working together counts once. Person hours add up everyone's own time.">
+        <Group title="This week" footer="Hours worked count robot time, so a pair working together counts once. Person hours add up everyone's own time.">
           <div className="compare">
             <div className="compare-row">
-              <span className="compare-label">Delivered</span>
+              <span className="compare-label">Hours worked</span>
               <span className="compare-track"><span className="compare-bar bar-blue reveal-x" style={{ width: `${(sum.deliveredWeek / max) * 100}%` }} /></span>
               <Num className="compare-val" value={sum.deliveredWeek} format={(v) => `${fmtHrs(v)} h`} />
             </div>
@@ -92,13 +99,13 @@ export function Hours() {
           {(saved || (succ != null && sum.deliveredWeek > 0)) && (
             <div className="field-note">
               {saved && <span className="saved fade-in" key={saved}>{saved}</span>}
-              {succ != null && sum.deliveredWeek > 0 && <span>{Math.round((succ / sum.deliveredWeek) * 100)}% of delivered</span>}
+              {succ != null && sum.deliveredWeek > 0 && <span>{Math.round((succ / sum.deliveredWeek) * 100)}% of hours worked</span>}
             </div>
           )}
         </Group>
 
         <Group title="To date">
-          <Row title="Delivered" trailing={<Num value={sum.deliveredAll} format={(v) => `${fmtHrs(v)} h`} />} />
+          <Row title="Hours worked" trailing={<Num value={sum.deliveredAll} format={(v) => `${fmtHrs(v)} h`} />} />
           <Row title="Person hours" trailing={<Num value={sum.personAll} format={(v) => `${fmtHrs(v)} h`} />} />
           <Row title="Successful (reported)" trailing={`${fmtHrs(data.client.reduce((a, c) => a + c.hours, 0))} h`} />
         </Group>
@@ -116,7 +123,7 @@ export function Hours() {
               <Avatar name={p.name} />
               <span className="row-main">
                 <span className="row-title">{p.name}{p.issues?.length ? <span className="dot-warn" aria-label={`${p.issues.length} flags`} /> : null}</span>
-                <span className="row-sub">{Object.keys(p.byDay).length} days</span>
+                <span className="row-sub">{Object.keys(p.byDay).length} days{p.planned ? ` · ${fmtHrs(p.planned)} h scheduled` : ''}</span>
               </span>
             </span>
             {days.map((d) => {

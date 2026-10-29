@@ -45,6 +45,19 @@ export const useStore = create((set, get) => ({
     }));
   },
 
+  async addShift(shift) {
+    const r = await api.addShift(shift);
+    set((s) => ({ data: { ...s.data, schedule: [...(s.data.schedule || []), r] } }));
+    return r;
+  },
+
+  async removeShift(id) {
+    const before = get().data;
+    // Optimistic: the row leaves at once; it comes back if the write fails.
+    set((s) => ({ data: { ...s.data, schedule: (s.data.schedule || []).filter((r) => r.id !== id) } }));
+    try { await api.removeShift(id); } catch (e) { set({ data: before }); throw e; }
+  },
+
   setMe(me) { storage.set('onsite-me', me); set({ me }); },
   forgetMe() { storage.remove('onsite-me'); set({ me: null }); },
   setDevice(device) { storage.set('onsite-device', device); set({ device }); },

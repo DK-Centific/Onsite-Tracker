@@ -43,6 +43,24 @@ One row per week: the client's "successful hours" figure, entered by a lead on t
 | `SuccessfulHours` | `61.5` |
 | `Updated` | ISO timestamp, `utcNow()` |
 
+### Table `Schedule` (sheet "Schedule")
+
+One row per person per shift: who is expected, on which robot, and when. Leads add rows on the **Schedule** tab in admin (backfills too), or type them straight into the sheet. The app compares this plan with the check-ins to show who's missing and which robots need a backfill.
+
+| Column | Example | Notes |
+|---|---|---|
+| `ID` | `9b1e…` (GUID) | From the flow (`guid()`). If you add rows by hand in Excel, put anything unique here, for example `manual-1` |
+| `Date` | `2026-10-29` | `yyyy-MM-dd`, site-local |
+| `Name` | `Casey Novak` | |
+| `Email` | `casey.novak@centific.com` | Lower-case; must match the email they check in with |
+| `Station` | `Robot 3` | Must match a name in `stations` in `public/config.js` |
+| `Start` | `08:00` | 24h `HH:mm`, site-local |
+| `End` | `14:00` | 24h `HH:mm`, site-local |
+| `Note` | `Backfill for Jordan` | Optional |
+| `Updated` | ISO timestamp | `utcNow()` |
+
+Keep every column as **Text**, as with the other tables, so Excel doesn't turn `08:00` into a time fraction or `2026-10-29` into a date serial.
+
 ---
 
 ## 2. Flow: **Onsite Write**
@@ -62,7 +80,11 @@ One row per week: the client's "successful hours" figure, entered by a lead on t
     "flag":     { "type": "string" },
     "deviceTs": { "type": "string" },
     "week":     { "type": "string" },
-    "hours":    { "type": "number" }
+    "hours":    { "type": "number" },
+    "id":       { "type": "string" },
+    "date":     { "type": "string" },
+    "start":    { "type": "string" },
+    "end":      { "type": "string" }
   }
 }
 ```
@@ -108,6 +130,22 @@ The page uses `punch.ts` as the official check-in time on the receipt it shows t
 2. If a row exists → **Update a row** (key column `Week`) with `SuccessfulHours` = `hours`, `Updated` = `utcNow()`. Otherwise → **Add a row into a table**.
 3. **Response** 200 `{"ok": true}`.
 
+### Case `schedule_add`
+
+1. **Condition (validation):** `date` matches `yyyy-MM-dd`, `email` contains `@`, `station`, `start` and `end` are not empty. If it fails, **Response** 400 `{"error":"Date, person, robot, start and end are required"}`.
+2. **Compose `id`:** `guid()`.
+3. **Add a row into a table**, `Schedule`: `ID` = id, `Date` = `date`, `Name` = `trim(name)`, `Email` = `toLower(trim(email))`, `Station` = `station`, `Start` = `start`, `End` = `end`, `Note` = `note`, `Updated` = `utcNow()`.
+4. **Response** 200:
+
+```json
+{ "ok": true, "shift": { "id": "<id>", "date": "<date>", "name": "<name>", "email": "<email>", "station": "<station>", "start": "<start>", "end": "<end>", "note": "<note>" } }
+```
+
+### Case `schedule_delete`
+
+1. **Delete a row**, table `Schedule`, Key Column `ID`, Key Value `id`.
+2. **Response** 200 `{"ok": true}`. If the row is already gone, also return `{"ok": true}`, because the page has already removed it.
+
 ### Default case
 
 **Response** 400 `{"error":"unknown action"}`.
@@ -138,13 +176,26 @@ flag    : if(empty(item()?['Flag']),'','early')
 ```
 
 3. **List rows present in a table**, `ClientHours` (pagination on), then **Select**: `week : item()?['Week']`, `hours : float(item()?['SuccessfulHours'])`. If `SuccessfulHours` can be blank, use `float(coalesce(item()?['SuccessfulHours'],'0'))`.
-4. **Response** 200, `Content-Type: application/json`:
+4. **List rows present in a table**, `Schedule` (pagination on, threshold 5000). Optionally add Filter Query `Date ge '<14 days ago, yyyy-MM-dd>'` once the sheet gets long. Then **Select**:
 
-```json
-{ "punches": <Select punches output>, "client": <Select client output> }
+```
+id      : item()?['ID']
+date    : item()?['Date']
+name    : item()?['Name']
+email   : item()?['Email']
+station : item()?['Station']
+start   : item()?['Start']
+end     : item()?['End']
+note    : item()?['Note']
 ```
 
-For `action` = `status` you can skip step 3 and return `"client": []`.
+5. **Response** 200, `Content-Type: application/json`:
+
+```json
+{ "punches": <Select punches output>, "client": <Select client output>, "schedule": <Select schedule output> }
+```
+
+For `action` = `status` you can skip steps 3 and 4 and return `"client": [], "schedule": []`.
 
 ---
 
@@ -152,13 +203,15 @@ For `action` = `status` you can skip step 3 and return `"client": []`.
 
 - **Shifts:** pairs each person's `IN` with their next `OUT`. An `IN` with no `OUT` by the end of that day is flagged **No check-out** and counts no hours.
 - **Person hours:** each person's own time added up, per day and per week.
-- **Delivered hours:** for each *day + robot*, the **overlap of everyone's time is merged**. Two people on Robot 2 from 8:00 to 14:00 count as 6 delivered hours, not 12. If one leaves at 12:00 and the other stays, it's still 6.
+- **Hours worked (robot time):** for each *day + robot*, the **overlap of everyone's time is merged**. Two people on Robot 2 from 8:00 to 14:00 count as 6 hours worked, not 12. If one leaves at 12:00 and the other stays, it's still 6.
 - **Left early:** any `OUT` sooner than `shiftHours − earlyGraceMinutes` (config: 6 h − 15 min) after that person's `IN` must include a reason, and it's flagged.
+- **Schedule vs check-ins:** for each scheduled shift, the page shows the person as *on site* once they check in that day, *not here yet* from 15 minutes after the start (a robot missing its person shows **Needs a backfill**), and *no-show* once the shift ends with no check-in. Check-ins with no scheduled shift show as *not on the schedule*. A robot that has some shifts on a day but fewer than two people scheduled shows as *understaffed* on the Schedule tab.
 - **Exports:** **Records** downloads a check-in log CSV (same columns as `Punches`) and a shifts CSV (in, out, hours per person per day) to compare with the client's badge records.
 
 ## 5. Test after building
 
 1. With both URLs in `public/config.js`, open the page, check in, and confirm a row appears in `Punches` with server `Timestamp` and site-local `Date`/`Time`.
 2. Check out right away. The page should ask for a reason. Confirm `Flag` = `Left early` and that the alert email arrives.
-3. Open **Today** (`#/today`) and confirm the person shows under "On site" and in their robot's lane, and the early check-out under "Needs attention".
-4. On **Hours**, type a number in **Client successful hours** and confirm a `ClientHours` row for that Monday.
+3. Open **Today** (`#/admin/today`) and confirm the person shows under "On site" and in their robot's lane, and the early check-out under "Needs attention".
+4. On **Schedule** (`#/admin/schedule`), add a shift for today that started over 15 minutes ago, for someone who isn't checked in. Confirm a `Schedule` row appears and that **Today** lists them under "Missing", with their robot under "Needs a backfill". Remove the shift and confirm the row is deleted.
+5. On **Hours**, type a number in **Client successful hours** and confirm a `ClientHours` row for that Monday.

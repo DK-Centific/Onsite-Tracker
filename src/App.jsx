@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { Toaster, toast } from 'sonner';
-import { ChartColumn, Clock, ExternalLink, List, Monitor, Moon, RefreshCw, Settings, Smartphone, Sun, Tablet, Users } from 'lucide-react';
+import { CalendarDays, ChartColumn, Clock, ExternalLink, List, Monitor, Moon, RefreshCw, Settings, Smartphone, Sun, Tablet, Users } from 'lucide-react';
 import { useStore } from './lib/store.js';
 import { CFG, DEMO } from './lib/config.js';
 import { go, useMedia, useRoute } from './lib/hooks.js';
@@ -11,6 +11,7 @@ import { CheckIn } from './views/CheckIn.jsx';
 import { Today } from './views/Today.jsx';
 import { Hours } from './views/Hours.jsx';
 import { Records } from './views/Records.jsx';
+import { Schedule } from './views/Schedule.jsx';
 import centificMark from './assets/centific-mark.png';
 
 // Centific mark, drawn as a mask so it takes the theme's logo color (dark grey / white).
@@ -22,11 +23,12 @@ const Logo = ({ size = 28 }) => (
 // views for leads (#/admin/...). Nothing on the check-in page links to admin.
 const ADMIN_NAV = [
   { id: 'admin/today', label: 'Today', icon: Users, view: Today },
+  { id: 'admin/schedule', label: 'Schedule', icon: CalendarDays, view: Schedule },
   { id: 'admin/hours', label: 'Hours', icon: ChartColumn, view: Hours },
   { id: 'admin/records', label: 'Records', icon: List, view: Records },
 ];
 const CHECKIN = { id: 'checkin', label: 'Check in', icon: Clock, view: CheckIn };
-const LEGACY = { today: 'admin/today', hours: 'admin/hours', records: 'admin/records', admin: 'admin/today' };
+const LEGACY = { today: 'admin/today', schedule: 'admin/schedule', hours: 'admin/hours', records: 'admin/records', admin: 'admin/today' };
 
 export default function App() {
   const route = useRoute();

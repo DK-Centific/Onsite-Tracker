@@ -2,12 +2,17 @@
 
 Check-in/check-out tracker for the Google DeepMind on-site staffing project. React + Vite, built to static files for GitHub Pages. An Excel workbook on SharePoint holds the data, read and written through two Power Automate flows.
 
-| View | For | What it does |
-|---|---|---|
-| **Check in** | Moderators and contractors | Pick your robot and tap Check in. A ring then shows your shift so far and your partner. Checking out before the shift ends asks for a reason and alerts the leads. Works on a personal phone (remembers you) or a shared tablet (pick your name each time). |
-| **Today** | Leads | Robot lanes for the day: each person's time and the robot's merged delivered time. Also who's on site, and anything that needs attention (left early, no check-out, no check-in). |
-| **Hours** | Leads | Delivered vs client successful hours for the week, person hours, totals to date, and per-person daily hours. Tap a person to see their shifts. |
-| **Records** | Leads | Every check-in grouped by day, a Flags filter, and CSV exports (check-in log, shifts) for badge reconciliation. |
+Two separate pages:
+
+- **Check-in page** (`/`), for everyone on site: pick your robot and tap Check in. A ring then shows your shift so far and your partner. Checking out before the shift ends asks for a reason and alerts the leads. It works on a personal phone (remembers you) or a shared tablet (pick your name each time).
+- **Admin** (`/#/admin`), for leads:
+
+| View | What it does |
+|---|---|
+| **Today** | **Needs a backfill** (robots whose scheduled person hasn't arrived, with a one-tap backfill). Robot lanes for the day: each person's time, scheduled people who haven't arrived as dashed outlines, and the robot's merged hours worked. **Needs attention**: not here yet, no-shows, left early, missed check-ins or check-outs, and check-ins with no shift on the schedule. **On site**: who is here now. |
+| **Schedule** | The week's plan by day and robot, with each person's status. Understaffed robots are flagged; add, remove or backfill shifts. |
+| **Hours** | Hours worked (robot time) vs client successful hours for the week, person hours, totals to date, and per-person daily hours against scheduled hours. |
+| **Records** | Every check-in grouped by day, a Flags filter, and CSV exports: check-in log, shifts, and schedule vs actual, for badge reconciliation. |
 
 Light and dark appearance follow the system, or can be set in Settings.
 

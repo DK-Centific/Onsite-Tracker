@@ -5,6 +5,7 @@ import { buildSessions } from '../lib/hours.js';
 import { dayKey, fmtHrs, fmtLongDay, fmtTime, pad, parseDay } from '../lib/time.js';
 import { Group, Row, Segmented, Tag } from '../components/ui.jsx';
 import { ISSUE, issueDetail } from './Today.jsx';
+import { STATUS, dayPlan } from '../lib/schedule.js';
 
 function download(name, rows) {
   const csv = rows.map((r) => r.map((c) => {
@@ -49,11 +50,24 @@ export function Records() {
     download(`onsite-checkins-${dayKey(new Date())}.csv`, rows);
   };
   const exportShifts = () => {
-    const rows = [['Date', 'Name', 'Email', 'Robot / station', 'In', 'Out', 'Hours', 'Left early', 'Note']];
+    const rows = [['Date', 'Name', 'Email', 'Robot / station', 'In', 'Out', 'Person hours', 'Left early', 'Note']];
     for (const s of [...sessions].filter((x) => !x.live).sort((a, b) => a.start - b.start)) {
       rows.push([s.day, s.name, s.email, s.station, hhmm(s.start), hhmm(s.end), s.hours.toFixed(2), s.early ? 'Yes' : '', s.note || '']);
     }
     download(`onsite-shifts-${dayKey(new Date())}.csv`, rows);
+  };
+  const exportPlan = () => {
+    const rows = [['Date', 'Name', 'Email', 'Robot / station', 'Scheduled start', 'Scheduled end', 'Status', 'Actual in', 'Actual out', 'Person hours', 'Note']];
+    const dates = [...new Set((data.schedule || []).map((r) => r.date))].sort();
+    for (const k of dates) {
+      for (const r of dayPlan(data.schedule, sessions, issues, parseDay(k)).rows) {
+        const worked = r.sessions.reduce((a, x) => a + x.hours, 0);
+        const first = r.sessions[0];
+        const last = r.sessions[r.sessions.length - 1];
+        rows.push([r.date, r.name, r.email, r.station, r.start, r.end, STATUS[r.status].label, first ? hhmm(first.start) : '', last && !last.live ? hhmm(last.end) : '', worked ? worked.toFixed(2) : '', r.note]);
+      }
+    }
+    download(`onsite-schedule-vs-actual-${dayKey(new Date())}.csv`, rows);
   };
 
   return (
@@ -81,6 +95,7 @@ export function Records() {
       <Group title="Export" className="export-group">
         <Row leading={<span className="row-icon"><Download size={18} /></span>} title="Check-in log" subtitle="One row per tap, same columns as the Excel sheet" trailing="CSV" onClick={exportLog} />
         <Row leading={<span className="row-icon"><Download size={18} /></span>} title="Shifts" subtitle="In, out and hours per person per day, for badge reconciliation" trailing="CSV" onClick={exportShifts} />
+        <Row leading={<span className="row-icon"><Download size={18} /></span>} title="Schedule vs actual" subtitle="Every scheduled shift with its status (worked, no-show) and actual in/out" trailing="CSV" onClick={exportPlan} />
       </Group>
 
       {groups.length === 0 && (
