@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { toast } from 'sonner';
 import { Check, ChevronRight, Search, Tablet, UserPlus } from 'lucide-react';
 import { useStore } from '../lib/store.js';
-import { CFG } from '../lib/config.js';
+import { CFG, DEMO } from '../lib/config.js';
 import { roster, statusOf, buildSessions } from '../lib/hours.js';
 import { claimName, knownPeople } from '../lib/onboarding.js';
 import { addDays, firstName, fmtLongDay, fmtTime, greeting, hoursBetween, dayKey, mondayOf, fmtHrsU, hrUnit, shortName } from '../lib/time.js';
@@ -271,7 +271,7 @@ function Person({ person, onDone, onSwitch, onStation, shared }) {
       const todays = sessions.filter((s) => s.email === person.email && s.day === dayKey(now));
       const hrs = type === 'out' ? todays.reduce((a, s) => a + s.hours, 0) : 0;
       toast.success(type === 'in' ? `Checked in at ${fmtTime(t)}` : `Checked out at ${fmtTime(t)}`, {
-        description: type === 'out' && extra.flag ? 'Your leads have been told.' : undefined,
+        description: type === 'out' && extra.flag ? (DEMO ? 'Demo mode: no email was sent to your leads.' : 'Your leads have been told.') : undefined,
       });
       onDone({ type, at: t, station: p.station, name: person.name, hours: hrs, early: !!extra.flag });
       setAskReason(false);
@@ -308,7 +308,7 @@ function Person({ person, onDone, onSwitch, onStation, shared }) {
           open={askReason}
           onOpenChange={setAskReason}
           title="Leaving early?"
-          description={`You've been on site ${fmtHrsU(elapsed)} of a ${CFG.shiftHours} ${hrUnit(CFG.shiftHours)} shift. Your leads will be told, so let them know why.`}
+          description={`You've been on site ${fmtHrsU(elapsed)} of a ${CFG.shiftHours} ${hrUnit(CFG.shiftHours)} shift. ${DEMO ? 'In the live app your leads get an email with your reason. This is demo mode, so none is sent.' : 'Your leads will be told, so let them know why.'}`}
           footer={
             <button
               type="button"
@@ -398,7 +398,7 @@ function Done({ done, onNext, shared }) {
         {done.name} · {done.station}
         {done.type === 'out' && done.hours > 0 ? ` · ${fmtHrsU(done.hours)} today` : ''}
       </p>
-      {done.early && <Tag tone="bad">Left early · leads notified</Tag>}
+      {done.early && <Tag tone="bad">{DEMO ? 'Left early · demo, leads not emailed' : 'Left early · leads notified'}</Tag>}
       <div className="dock">
         <button type="button" className="btn btn-plain btn-block" onClick={onNext}>
           {shared ? 'Next operator' : 'Done'}
