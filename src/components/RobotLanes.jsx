@@ -14,7 +14,7 @@ function tipAt(el) {
   const b = el.getBoundingClientRect();
   const mid = b.left - r.left + Math.min(b.width, r.right - b.left) / 2;
   const below = b.top - r.top < TIP_ROOM;
-  return { left: Math.max(96, Math.min(r.width - 96, mid)), top: below ? b.bottom - r.top : b.top - r.top, below };
+  return { left: Math.max(120, Math.min(r.width - 120, mid)), top: below ? b.bottom - r.top : b.top - r.top, below };
 }
 
 // One lane per robot across the day. Each person's time is a thin line labelled with

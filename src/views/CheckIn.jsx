@@ -390,7 +390,7 @@ function Done({ done, onNext, shared }) {
       {done.early && <Tag tone="bad">Left early · leads notified</Tag>}
       <div className="dock">
         <button type="button" className="btn btn-plain btn-block" onClick={onNext}>
-          {shared ? 'Next person' : 'Done'}
+          {shared ? 'Next operator' : 'Done'}
         </button>
       </div>
     </div>

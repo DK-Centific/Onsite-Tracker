@@ -202,7 +202,7 @@ For `action` = `status` you can skip steps 3 and 4 and return `"client": [], "sc
 ## 4. What the page does with the data (so the flows don't need to)
 
 - **Shifts:** pairs each person's `IN` with their next `OUT`. An `IN` with no `OUT` by the end of that day is flagged **No check-out** and counts no hours.
-- **Person hours:** each person's own time added up, per day and per week.
+- **Operator hours:** each operator's own time added up, per day and per week.
 - **Hours worked (robot time):** for each *day + robot*, the **overlap of everyone's time is merged**. Two people on Robot 2 from 8:00 to 14:00 count as 6 hours worked, not 12. If one leaves at 12:00 and the other stays, it's still 6.
 - **Left early:** any `OUT` sooner than `shiftHours − earlyGraceMinutes` (config: 6 h − 15 min) after that person's `IN` must include a reason, and it's flagged.
 - **Schedule vs check-ins:** for each scheduled shift, the page shows the person as *on site* once they check in that day, *not here yet* from 15 minutes after the start (a robot missing its person shows **Needs a backfill**), and *no-show* once the shift ends with no check-in. Check-ins with no scheduled shift show as *not on the schedule*. A robot that has some shifts on a day but fewer than two people scheduled shows as *understaffed* on the Schedule tab.

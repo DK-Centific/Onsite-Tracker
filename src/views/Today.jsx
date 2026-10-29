@@ -112,7 +112,7 @@ export function Today() {
       <Group
         title="Robots"
         action={<span className="group-aside"><Num value={deliveredDay} format={(v) => `${fmtHrs(v)} h`} /> worked</span>}
-        footer="Thin lines are each person's time. The bar beneath is the robot's hours worked, so two people working together count once."
+        footer="Thin lines are each operator's time. The bar beneath is the robot's hours worked, so two operators working together count once."
       >
         <RobotLanes day={day} sessions={daySessions} planned={plan.rows.filter((r) => r.status === 'late' || r.status === 'noshow' || r.status === 'upcoming')} stations={stations} now={now} pairSize={2} />
       </Group>
@@ -131,7 +131,7 @@ export function Today() {
               title={<>{i.name} <Tag tone={ISSUE[i.kind].tone} icon={ISSUE[i.kind].icon}>{ISSUE[i.kind].label}</Tag></>}
               subtitle={i.sub}
             />
-          )) : <div className="empty-row">{isToday ? 'Nothing in the last 7 days. Missing people, early check-outs and missed check-outs land here.' : 'Nothing on this day.'}</div>}
+          )) : <div className="empty-row">{isToday ? 'Nothing in the last 7 days. Missing operators, early check-outs and missed check-outs land here.' : 'Nothing on this day.'}</div>}
         </Group>
         {isToday && (
           <Group title="On site">
@@ -145,7 +145,7 @@ export function Today() {
                 subtitle={`${s.station} · since ${fmtTime(s.start)}`}
                 trailing={<span className="mono-num">{fmtHrs(hoursBetween(s.start, now))} h</span>}
               />
-            )) : <div className="empty-row">Check-ins show up here as people arrive.</div>}
+            )) : <div className="empty-row">Check-ins show up here as operators arrive.</div>}
           </Group>
         )}
       </div>

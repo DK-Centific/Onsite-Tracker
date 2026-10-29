@@ -11,7 +11,7 @@ Two separate pages:
 |---|---|
 | **Today** | **Needs a backfill** (robots whose scheduled person hasn't arrived, with a one-tap backfill). Robot lanes for the day: each person's time, scheduled people who haven't arrived as dashed outlines, and the robot's merged hours worked. **Needs attention**: not here yet, no-shows, left early, missed check-ins or check-outs, and check-ins with no shift on the schedule. **On site**: who is here now. |
 | **Schedule** | The week's plan by day and robot, with each person's status. Understaffed robots are flagged; add, remove or backfill shifts. |
-| **Hours** | Hours worked (robot time) vs client successful hours for the week, person hours, totals to date, and per-person daily hours against scheduled hours. |
+| **Hours** | Hours worked (robot time) vs client successful hours for the week, operator hours, totals to date, and per-operator daily hours against scheduled hours. |
 | **Records** | Every check-in grouped by day, a Flags filter, and CSV exports: check-in log, shifts, and schedule vs actual, for badge reconciliation. |
 
 Light and dark appearance follow the system, or can be set in Settings.

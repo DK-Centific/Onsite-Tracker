@@ -27,7 +27,7 @@ export function ShiftRing({ hours, shiftHours, children }) {
       </svg>
       <div className="ring-center">
         <span className="ring-time">{fmtClock(hours)}</span>
-        <span className="ring-of">{done ? 'shift complete' : `of ${fmtClock(shiftHours)} shift`}</span>
+        <span className="ring-of">{done ? 'shift complete' : `of ${fmtClock(shiftHours)} ${shiftHours === 1 ? 'hr' : 'hrs'} shift`}</span>
         {children}
       </div>
     </div>

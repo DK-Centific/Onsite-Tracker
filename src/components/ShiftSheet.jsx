@@ -34,7 +34,7 @@ export function ShiftSheet({ open, onOpenChange, initial, backfill }) {
   const save = async () => {
     const person = f.who === NEW ? { name: f.name.trim(), email: f.email.trim().toLowerCase() } : people.find((p) => p.email === f.who);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(f.date || '')) return setErr('Pick a date.');
-    if (!person || !person.name) return setErr('Pick who is working.');
+    if (!person || !person.name) return setErr('Pick an operator.');
     if (!validEmail(person.email)) return setErr('Add a valid email.');
     if (!f.start || !f.end) return setErr('Add a start and end time.');
     setBusy(true);
@@ -60,7 +60,7 @@ export function ShiftSheet({ open, onOpenChange, initial, backfill }) {
     >
       <Group footer={err ? <span className="err" role="alert">{err}</span> : undefined}>
         <label className="field-row">
-          <span>Person</span>
+          <span>Operator</span>
           <select value={f.who || ''} onChange={set('who')} className="field-select">
             <option value="" disabled>Choose…</option>
             {choices.map((p) => <option key={p.email} value={p.email}>{p.name}</option>)}

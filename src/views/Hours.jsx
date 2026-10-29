@@ -69,7 +69,7 @@ export function Hours() {
       </header>
 
       <div className="split">
-        <Group title="This week" footer="Hours worked count robot time, so a pair working together counts once. Person hours add up everyone's own time.">
+        <Group title="This week" footer="Hours worked count robot time, so a pair working together counts once. Operator hours add up each operator's own time.">
           <div className="compare">
             <div className="compare-row">
               <span className="compare-label">Hours worked</span>
@@ -84,7 +84,7 @@ export function Hours() {
               </div>
             )}
           </div>
-          <Row title="Person hours" trailing={<Num value={sum.personWeek} format={(v) => `${fmtHrs(v)} h`} />} />
+          <Row title="Operator hours" trailing={<Num value={sum.personWeek} format={(v) => `${fmtHrs(v)} h`} />} />
           <label className="field-row">
             <span>Client successful hours</span>
             <input
@@ -106,12 +106,12 @@ export function Hours() {
 
         <Group title="To date">
           <Row title="Hours worked" trailing={<Num value={sum.deliveredAll} format={(v) => `${fmtHrs(v)} h`} />} />
-          <Row title="Person hours" trailing={<Num value={sum.personAll} format={(v) => `${fmtHrs(v)} h`} />} />
+          <Row title="Operator hours" trailing={<Num value={sum.personAll} format={(v) => `${fmtHrs(v)} h`} />} />
           <Row title="Successful (reported)" trailing={`${fmtHrs(data.client.reduce((a, c) => a + c.hours, 0))} h`} />
         </Group>
       </div>
 
-      <Group title="People" footer="Tap someone to see their shifts.">
+      <Group title="Operators" footer="Tap an operator to see their shifts.">
         <div className="week-head" aria-hidden="true">
           <span />
           {days.map((d) => <span key={+d} className={dayKey(d) === dayKey(now) ? 'is-today' : ''}>{d.toLocaleDateString([], { weekday: 'narrow' })}</span>)}

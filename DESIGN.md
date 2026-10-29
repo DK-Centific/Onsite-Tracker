@@ -364,4 +364,4 @@ Two-column grid of raised 14px tiles (84px minimum) with robot name and overlapp
 - **Don't** set yellow solid as text, or small text in tertiary ink on the grey ground (about 4.1:1); use secondary ink there.
 - **Don't** add webfonts, display faces or brand marks; the client's logos and wordmarks are never used.
 - **Don't** build the category default: a time-clock form beside stacked KPI cards. Status is a sentence and lanes, not tiles of numbers.
-- **Don't** stack bars for a pair or sum their hours as hours worked; hours worked and person hours are always labelled distinctly.
+- **Don't** stack bars for a pair or sum their hours as hours worked; hours worked and operator hours are always labelled distinctly.
